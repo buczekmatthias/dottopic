@@ -2,47 +2,86 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enum\UserRole;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+	/** @use HasFactory<\Database\Factories\UserFactory> */
+	use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+	protected $fillable = [
+		'name',
+		'username',
+		'email',
+		'password',
+		'image',
+		'bio',
+		'last_login',
+		'role'
+	];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+	protected $hidden = [
+		'password',
+		'remember_token',
+	];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+	protected function casts(): array
+	{
+		return [
+			'password' => 'hashed',
+			'role' => UserRole::class
+		];
+	}
+
+	public function getInitialsAttribute(): string
+	{
+		$pieces = explode(" ", $this->attributes['name']);
+
+		return Str::upper(count($pieces) === 1 ? $pieces[0][0] : $pieces[0][0].array_pop($pieces)[0]);
+	}
+
+	public function articles(): HasMany
+	{
+		return $this->hasMany(Article::class);
+	}
+
+	public function comments(): HasMany
+	{
+		return $this->hasMany(Comment::class);
+	}
+
+	public function isWriter(): bool
+	{
+		return $this->attribute['role'] === UserRole::WRITER;
+	}
+
+	public function isMod(): bool
+	{
+		return $this->attribute['role'] === UserRole::MOD;
+	}
+
+	public function isAdmin(): bool
+	{
+		return $this->attribute['role'] === UserRole::ADMIN;
+	}
+
+	public function isDev(): bool
+	{
+		return $this->attribute['role'] === UserRole::DEV;
+	}
+
+	public function scopeType(Builder $query, UserRole $role)
+	{
+		$query->where('role', $role->value);
+	}
+
+	public function scopeTypeNot(Builder $query, UserRole $role)
+	{
+		$query->whereNot('role', $role->value);
+	}
 }

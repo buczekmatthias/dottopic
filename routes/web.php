@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn() => inertia('App'));
+Route::get('/', [AppController::class, 'app']);
