@@ -6,8 +6,8 @@ use Inertia\Response;
 
 class AppController extends Controller
 {
-	public function app(): Response
+	public function homepage(): Response
 	{
-		return inertia('App');
+		return inertia('Homepage');
 	}
 }

@@ -3,9 +3,21 @@
 @tailwind utilities;
 
 body {
-	@apply bg-slate-900 text-slate-50;
+    @apply bg-slate-200 text-slate-950;
 }
 
 #app {
-	@apply flex flex-col min-h-screen;
+    @apply flex flex-col min-h-screen;
+}
+
+input,
+select,
+textarea {
+    @apply !ring-0 !outline-none;
+}
+
+@layer components {
+    .content {
+        @apply bg-white rounded-md max-w-7xl mx-auto p-2.5;
+    }
 }

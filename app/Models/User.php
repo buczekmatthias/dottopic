@@ -57,22 +57,22 @@ class User extends Authenticatable
 
 	public function isWriter(): bool
 	{
-		return $this->attribute['role'] === UserRole::WRITER;
+		return $this->attributes['role'] === UserRole::WRITER;
 	}
 
 	public function isMod(): bool
 	{
-		return $this->attribute['role'] === UserRole::MOD;
+		return $this->attributes['role'] === UserRole::MOD;
 	}
 
 	public function isAdmin(): bool
 	{
-		return $this->attribute['role'] === UserRole::ADMIN;
+		return $this->attributes['role'] === UserRole::ADMIN;
 	}
 
 	public function isDev(): bool
 	{
-		return $this->attribute['role'] === UserRole::DEV;
+		return $this->attributes['role'] === UserRole::DEV;
 	}
 
 	public function scopeType(Builder $query, UserRole $role)
