@@ -1,5 +1,8 @@
 <template>
-    <div class="content">content</div>
+    <div class="content">{{ page.props.routes }}</div>
 </template>
 
-<script setup></script>
+<script setup>
+import { usePage } from "@inertiajs/vue3";
+const page = usePage();
+</script>

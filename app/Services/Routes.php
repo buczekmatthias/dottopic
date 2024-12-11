@@ -27,6 +27,10 @@ final class Routes
 			return self::getAdminRoutes();
 		}
 
+		if ($currentUser) {
+			return self::getUserRoutes();
+		}
+
 		return [];
 	}
 
@@ -41,28 +45,71 @@ final class Routes
 	private static function getGuestRoutes(): array
 	{
 		return [
-			...self::getSecurityRoutes()
+			...self::getSecurityRoutes(),
+			'articles.index',
+			'articles.show',
+			'categories.index',
+			'categories.show',
+			'tags.index',
+			'tags.show',
+			'users.index',
+			'users.show'
+		];
+	}
+
+	private static function getUserRoutes(): array
+	{
+		return [
+			...self::getGuestRoutes(),
+			'comments.store',
+			'comments.update',
+			'comments.destroy',
+			'reactions.store',
+			'reactions.destroy'
 		];
 	}
 
 	private static function getWriterRoutes(): array
 	{
 		return [
-			...self::getGuestRoutes()
+			...self::getUserRoutes(),
+			'articles.create',
+			'articles.store',
+			'articles.edit',
+			'articles.update',
+			'articles.destroy',
 		];
 	}
 
 	private static function getModRoutes(): array
 	{
 		return [
-			...self::getWriterRoutes()
+			...self::getWriterRoutes(),
+			'admin.dashboard',
+			'admin.categories.create',
+			'admin.categories.store',
+			'admin.categories.edit',
+			'admin.categories.update',
+			'admin.categories.destroy',
+			'admin.tags.create',
+			'admin.tags.store',
+			'admin.tags.edit',
+			'admin.tags.update',
+			'admin.tags.destroy',
+			'admin.users.create',
+			'admin.users.store',
+			'admin.users.edit',
+			'admin.users.update',
+			'admin.users.destroy',
 		];
 	}
 
 	private static function getAdminRoutes(): array
 	{
 		return [
-			...self::getModRoutes()
+			...self::getModRoutes(),
+			'admin.users.promote',
+			'admin.users.demote',
 		];
 	}
 }

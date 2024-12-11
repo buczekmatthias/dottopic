@@ -15,6 +15,11 @@ class Category extends Model
 	/** @use HasFactory<\Database\Factories\CategoryFactory> */
 	use HasFactory;
 
+	public function getRouteKeyName()
+	{
+		return 'slug';
+	}
+
 	protected $fillable = [
 		'name',
 		'slug'

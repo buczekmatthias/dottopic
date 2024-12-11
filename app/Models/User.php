@@ -14,6 +14,11 @@ class User extends Authenticatable
 	/** @use HasFactory<\Database\Factories\UserFactory> */
 	use HasFactory;
 
+	public function getRouteKeyName()
+	{
+		return 'username';
+	}
+
 	protected $fillable = [
 		'name',
 		'username',

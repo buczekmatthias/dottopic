@@ -10,4 +10,8 @@ class AppController extends Controller
 	{
 		return inertia('Homepage');
 	}
+
+	public function adminDashboard()
+	{
+	}
 }

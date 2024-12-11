@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\ModMiddleware;
+use App\Http\Middleware\WriterMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -14,6 +17,12 @@ return Application::configure(basePath: dirname(__DIR__))
 	->withMiddleware(function (Middleware $middleware) {
 		$middleware->web(append: [
 			HandleInertiaRequests::class
+		]);
+
+		$middleware->alias([
+			'writer' => WriterMiddleware::class,
+			'mod' => ModMiddleware::class,
+			'admin' => AdminMiddleware::class
 		]);
 	})
 	->withExceptions(function (Exceptions $exceptions) {
