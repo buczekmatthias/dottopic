@@ -1,5 +1,10 @@
 <template>
-    <div class="content">{{ page.props.routes }}</div>
+    <div class="content">
+        {{ page.props.routes }}
+        <br />
+        <br />
+        {{ page.props.latest_articles }}
+    </div>
 </template>
 
 <script setup>

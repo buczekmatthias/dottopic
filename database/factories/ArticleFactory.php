@@ -21,10 +21,22 @@ class ArticleFactory extends Factory
 			'slug' => fake()->unique()->uuid(),
 			'description' => fake()->sentences(3, true),
 			'content' => json_encode([
-				'header' => fake()->sentence(4),
-				'text' => fake()->sentences(4, true),
-				'text' => fake()->sentences(8, true),
-				'text' => fake()->sentences(2, true)
+				[
+					'type' => 'header',
+					'content' => fake()->sentence(4)
+				],
+				[
+					'type' => 'text',
+					'content' => fake()->sentences(4, true)
+				],
+				[
+					'type' => 'text',
+					'content' => fake()->sentences(8, true)
+				],
+				[
+					'type' => 'text',
+					'content' => fake()->sentences(2, true)
+				],
 			])
 		];
 	}
