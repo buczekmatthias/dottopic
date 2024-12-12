@@ -2,12 +2,12 @@
 
 namespace App\Http\Middleware;
 
-use App\Enum\UserRole;
+use App\Services\Breadcrumbs;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class WriterMiddleware
+class BreadcrumbsMiddleware
 {
 	/**
 	 * Handle an incoming request.
@@ -16,10 +16,8 @@ class WriterMiddleware
 	 */
 	public function handle(Request $request, Closure $next): Response
 	{
-		if ($request->user() && $request->user()->role !== UserRole::USER) {
-			return $next($request);
-		}
+		Breadcrumbs::generateCrumbs();
 
-		return to_route('homepage');
+		return $next($request);
 	}
 }

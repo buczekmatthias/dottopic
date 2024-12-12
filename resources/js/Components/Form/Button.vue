@@ -6,7 +6,7 @@
     >
         <template v-if="isProcessing">
             <Loader :colors="loaderColors" :size="loaderSize" />
-            {{ progressingText }}...
+            {{ processingText }}...
         </template>
         <template v-else>
             <slot />
@@ -20,7 +20,7 @@ import Loader from "@/Components/Loader.vue";
 defineProps({
     isDisabled: { type: Boolean, default: false },
     isProcessing: { type: Boolean, default: false },
-    progressingText: String,
+    processingText: String,
     extraClasses: String,
     loaderColors: String,
     loaderSize: String,

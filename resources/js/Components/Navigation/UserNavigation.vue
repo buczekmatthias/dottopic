@@ -3,22 +3,67 @@
         class="grid grid-rows-[auto_1fr] grid-cols-[60px_1fr] lg:grid-cols-[100px_1fr]"
     >
         <div
-            class="col-span-full bg-white p-2 h-14 flex items-center justify-between"
+            class="col-span-full bg-white p-2 h-14 flex items-center justify-between sticky top-0"
         >
             <p class="text-2xl font-semibold">
                 <span class="text-indigo-700">dot</span>Topic
             </p>
             <NavigationUserBox />
         </div>
-        <div class="bg-white h-[calc(100vh-3.5rem)] flex flex-col items-center">
-            Left
+        <div
+            class="bg-white h-[calc(100vh-3.5rem)] flex flex-col items-center justify-center gap-4 sticky top-14 py-3 lg:py-5"
+        >
+            <Link
+                :href="route(link.route)"
+                v-for="link in navigation"
+                :key="link.route"
+                class="p-2.5 lg:py-3 lg:px-6 rounded-md"
+                :class="{
+                    'bg-indigo-700 [&>*]:fill-white': isActiveRoute(link.route),
+                }"
+            >
+                <component :is="link.icon"></component>
+            </Link>
         </div>
-        <div class="p-2.5 lg:p-5">
+        <div class="p-2.5 lg:p-5 flex flex-col gap-3">
+            <Breadcrumbs />
             <slot />
         </div>
     </div>
 </template>
 
 <script setup>
+import { Link } from "@inertiajs/vue3";
+import route, { isActiveRoute } from "@/Composables/Route";
+
 import NavigationUserBox from "@/Components/NavigationUserBox.vue";
+import Home from "@/Components/Icons/Home.vue";
+import Article from "@/Components/Icons/Article.vue";
+import Category from "@/Components/Icons/Category.vue";
+import Tag from "@/Components/Icons/Tag.vue";
+import User from "@/Components/Icons/User.vue";
+import Breadcrumbs from "@/Components/Breadcrumbs.vue";
+
+const navigation = [
+    {
+        route: "homepage",
+        icon: Home,
+    },
+    {
+        route: "articles.index",
+        icon: Article,
+    },
+    {
+        route: "categories.index",
+        icon: Category,
+    },
+    {
+        route: "tags.index",
+        icon: Tag,
+    },
+    {
+        route: "users.index",
+        icon: User,
+    },
+];
 </script>

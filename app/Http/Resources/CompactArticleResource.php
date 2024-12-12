@@ -19,7 +19,7 @@ class CompactArticleResource extends JsonResource
 			'slug' => $this->slug,
 			'description' => $this->description,
 			'author' => ['name' => $this->author->name, 'username' => $this->author->username],
-			'category' => CategoryResource::make($this->category),
+			'category' => ['name' => $this->category->name, 'slug' => $this->category->slug],
 			'created_at' => $this->created_at->format('F jS, Y')
 		];
 	}

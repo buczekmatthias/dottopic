@@ -1,13 +1,13 @@
-<template>
+<template #default="{ breadCrumbs }">
     <div class="content">
-        {{ page.props.routes }}
-        <br />
-        <br />
-        {{ page.props.latest_articles }}
+        {{ latest_articles }}
     </div>
 </template>
 
 <script setup>
-import { usePage } from "@inertiajs/vue3";
-const page = usePage();
+defineProps({
+    latest_articles: Object,
+});
+
+const breadCrumbs = ["homepage"];
 </script>

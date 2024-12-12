@@ -5,7 +5,13 @@ export default function useRoute(
     name,
     params,
     absolute,
-    config = usePage().props.routes
+    config = usePage().props.routes.ziggy
 ) {
     return route(name, params, absolute, config);
 }
+
+const currentRoute = () => usePage().props.routes.current;
+
+const isActiveRoute = (r) => r === currentRoute();
+
+export { currentRoute, isActiveRoute };

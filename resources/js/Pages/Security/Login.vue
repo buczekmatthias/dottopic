@@ -22,7 +22,7 @@
             />
             <Checkbox label="Stay logged in" v-model="loginForm.remember_me" />
             <Button
-                progressingText="Signing in"
+                processingText="Signing in"
                 loaderColors="border-indigo-200 border-t-indigo-400"
                 :isProcessing="loginForm.processing"
             >

@@ -33,7 +33,7 @@
                 v-model="registerForm.password"
             />
             <Button
-                progressingText="Joining"
+                processingText="Joining"
                 loaderColors="border-indigo-200 border-t-indigo-400"
                 :isProcessing="registerForm.processing"
             >

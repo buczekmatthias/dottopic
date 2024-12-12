@@ -11,9 +11,7 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
-import { Link, usePage } from "@inertiajs/vue3";
+import { Link } from "@inertiajs/vue3";
 import route from "@/Composables/Route";
-
-const currentUser = computed(() => usePage().props.auth.user);
+import currentUser from "@/Composables/User";
 </script>

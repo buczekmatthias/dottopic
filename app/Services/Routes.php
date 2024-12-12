@@ -37,9 +37,9 @@ final class Routes
 	private static function getSecurityRoutes(): array
 	{
 		return Auth::user() ?
-		['security.logout']
+		['security.logout', 'homepage']
 		:
-		['security.login', 'security.register'];
+		['security.login', 'security.register', 'homepage'];
 	}
 
 	private static function getGuestRoutes(): array

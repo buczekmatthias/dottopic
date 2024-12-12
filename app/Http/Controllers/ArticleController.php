@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ArticleResource;
+use App\Http\Resources\CompactArticleResource;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Inertia\Response;
 
 class ArticleController extends Controller implements HasMiddleware
 {
@@ -16,14 +19,16 @@ class ArticleController extends Controller implements HasMiddleware
 		];
 	}
 
-	public function index()
+	public function index(): Response
 	{
-		//
+		return inertia('Articles/Index', [
+			'articles' => CompactArticleResource::collection(Article::with(['author', 'category'])->latest()->paginate(20))
+		]);
 	}
 
-	public function create()
+	public function create(): Response
 	{
-		//
+		return inertia('Articles/Create');
 	}
 
 	public function store(Request $request)
@@ -31,14 +36,22 @@ class ArticleController extends Controller implements HasMiddleware
 		//
 	}
 
-	public function show(Article $article)
+	public function show(Article $article): Response
 	{
-		//
+		$article->load(['author', 'comments', 'reactions', 'category']);
+
+		return inertia('Articles/Show', [
+			'article' => ArticleResource::make($article)
+		]);
 	}
 
-	public function edit(Article $article)
+	public function edit(Article $article): Response
 	{
-		//
+		$article->load(['author', 'comments', 'reactions', 'category']);
+
+		return inertia('Articles/Edit', [
+			'article' => ArticleResource::make($article)
+		]);
 	}
 
 	public function update(Request $request, Article $article)

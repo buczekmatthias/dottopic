@@ -2,8 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\Breadcrumbs;
 use App\Services\Routes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
@@ -39,9 +41,16 @@ class HandleInertiaRequests extends Middleware
 	public function share(Request $request): array
 	{
 		return array_merge(parent::share($request), [
-			'auth.user' => fn () => $request->user() ? $request->user()->only('name', 'username', 'image', 'initials', 'role') : null,
+			'auth.user' => fn () => $request->user() ? [
+				...$request->user()->only('name', 'username', 'image', 'initials', 'role'),
+				'isStaff' => $request->user()->isMod() || $request->user()->isAdmin() || $request->user()->isDev()
+			] : null,
+			'breadcrumbs' => Breadcrumbs::getBreadcrumbs(),
 			'errors' => Session::get('errors') ? Session::get('errors')->getBag('default')->getMessages() : [],
-			'routes' => (new Ziggy())->filter(Routes::getSharedRoutes())->toArray()
+			'routes' => [
+				'current' => Route::currentRouteName(),
+				'ziggy' => (new Ziggy())->filter(Routes::getSharedRoutes())->toArray()
+			]
 		]);
 	}
 }

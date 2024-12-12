@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Observers\CategoryObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -33,5 +34,10 @@ class Category extends Model
 	public function tags(): MorphToMany
 	{
 		return $this->morphToMany(Tag::class, 'taggable');
+	}
+
+	public function scopeAlphabetically(Builder $query, bool $reversed = false)
+	{
+		$query->orderBy('name', $reversed ? 'DESC' : 'ASC');
 	}
 }

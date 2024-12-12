@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\BreadcrumbsMiddleware;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\ModMiddleware;
 use App\Http\Middleware\WriterMiddleware;
@@ -16,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
 	)
 	->withMiddleware(function (Middleware $middleware) {
 		$middleware->web(append: [
+			BreadcrumbsMiddleware::class,
 			HandleInertiaRequests::class
 		]);
 
