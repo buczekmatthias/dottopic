@@ -1,4 +1,5 @@
 <template>
+    <Head :title="`${crumbs[0]} | dotTopic`" />
     <div class="content">
         <p v-html="getBreadCrumbs()"></p>
     </div>
@@ -6,7 +7,7 @@
 
 <script setup>
 import { computed } from "vue";
-import { usePage } from "@inertiajs/vue3";
+import { usePage, Head } from "@inertiajs/vue3";
 
 const crumbs = computed(() => usePage().props.breadcrumbs[0]);
 

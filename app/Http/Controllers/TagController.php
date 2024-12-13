@@ -47,7 +47,7 @@ class TagController extends Controller
 
 	public function show(Tag $tag): Response
 	{
-		$tag->articles = $tag->articles()->paginate(20, pageName: 'articlesPage');
+		$tag->articles = $tag->articles()->with(['author', 'category'])->paginate(20, pageName: 'articlesPage');
 		$tag->categories = $tag->categories()->paginate(30, pageName: 'categoriesPage');
 
 		return inertia('Tags/Show', [
@@ -78,7 +78,7 @@ class TagController extends Controller
 
 		$tag->save();
 
-		if (Tag::where('name', $request->post('name'))->first()) {
+		if (Tag::select('id')->where('name', $request->post('name'))->first()) {
 			return to_route('tags.index', status: 303);
 		}
 

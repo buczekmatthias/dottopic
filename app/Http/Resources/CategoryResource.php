@@ -21,7 +21,7 @@ class CategoryResource extends JsonResource
 			'articles' => [
 				'data' => CompactArticleResource::collection($this->articles->items()),
 				'pagination' => Arr::except($this->articles->toArray(), 'data')
-			]
+			],
 		];
 	}
 }
