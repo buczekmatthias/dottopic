@@ -25,6 +25,7 @@ Route::controller(SecurityController::class)->prefix('security')->name('security
 });
 
 Route::resource('users', UserController::class)->only(['index', 'show']);
+Route::resource('users', UserController::class)->middleware('auth')->only(['edit', 'update', 'destroy']);
 Route::resource('articles', ArticleController::class);
 Route::resource('categories', CategoryController::class)->only(['index', 'show']);
 Route::resource('tags', TagController::class)->only(['index', 'show']);
@@ -34,9 +35,11 @@ Route::resource('reactions', ReactionController::class)->middleware('auth')->onl
 
 Route::prefix('admin')->name('admin.')->middleware('mod')->group(function () {
 	Route::get('/', [AppController::class, 'adminDashboard'])->name('dashboard');
-	Route::resource('users', UserController::class)->only(['edit', 'update', 'destroy']);
-	Route::get('users/{user}/promote', [UserController::class, 'promote'])->name('users.promote');
-	Route::get('users/{user}/demote', [UserController::class, 'demote'])->name('users.demote');
 	Route::resource('categories', CategoryController::class)->except(['index', 'show']);
 	Route::resource('tags', TagController::class)->except(['index', 'show']);
+
+	Route::controller(UserController::class)->middleware('admin')->prefix('users')->name('users.')->group(function () {
+		Route::get('{user}/promote', 'promote')->name('promote');
+		Route::get('{user}/demote', 'demote')->name('demote');
+	});
 });

@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
-class Breadcrumbs
+final class Breadcrumbs
 {
 	// TODO: Make crumbs as links
 	public static function getBreadcrumbs(): array

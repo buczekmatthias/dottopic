@@ -52,12 +52,12 @@ class User extends Authenticatable
 
 	public function articles(): HasMany
 	{
-		return $this->hasMany(Article::class);
+		return $this->hasMany(Article::class, 'author_id');
 	}
 
 	public function comments(): HasMany
 	{
-		return $this->hasMany(Comment::class);
+		return $this->hasMany(Comment::class, 'author_id');
 	}
 
 	public function isWriter(): bool
@@ -80,13 +80,13 @@ class User extends Authenticatable
 		return $this->role === UserRole::DEV;
 	}
 
-	public function scopeType(Builder $query, UserRole $role)
+	public function scopeType(Builder $query, string $role)
 	{
-		$query->where('role', $role->value);
+		$query->where('role', $role);
 	}
 
-	public function scopeTypeNot(Builder $query, UserRole $role)
+	public function scopeTypeNot(Builder $query, string $role)
 	{
-		$query->whereNot('role', $role->value);
+		$query->whereNot('role', $role);
 	}
 }
