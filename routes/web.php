@@ -26,6 +26,10 @@ Route::controller(SecurityController::class)->prefix('security')->name('security
 
 Route::resource('users', UserController::class)->only(['index', 'show']);
 Route::resource('users', UserController::class)->middleware('auth')->only(['edit', 'update', 'destroy']);
+Route::controller(UserController::class)->prefix('users')->name('users.update.image')->middleware('auth')->group(function () {
+	Route::post('{user}/image', 'updateImage');
+	Route::delete('{user}/image', 'deleteImage');
+});
 Route::resource('articles', ArticleController::class);
 Route::resource('categories', CategoryController::class)->only(['index', 'show']);
 Route::resource('tags', TagController::class)->only(['index', 'show']);

@@ -61,6 +61,10 @@ final class Routes
 	{
 		return [
 			...self::getGuestRoutes(),
+			'users.edit',
+			'users.update',
+			'users.update.image',
+			'users.destroy',
 			'comments.store',
 			'comments.update',
 			'comments.destroy',
@@ -96,11 +100,6 @@ final class Routes
 			'admin.tags.edit',
 			'admin.tags.update',
 			'admin.tags.destroy',
-			'admin.users.create',
-			'admin.users.store',
-			'admin.users.edit',
-			'admin.users.update',
-			'admin.users.destroy',
 		];
 	}
 

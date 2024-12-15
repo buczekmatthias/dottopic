@@ -22,6 +22,7 @@ class UserResource extends JsonResource
 			'username' => $this->username,
 			'image' => $this->image,
 			'initials' => $this->initials,
+			'bio' => $this->bio,
 			'role' => Str::ucfirst($this->role->value),
 			'articles_count' => $this->whenCounted('articles'),
 			'comments_count' => $this->whenCounted('comments'),

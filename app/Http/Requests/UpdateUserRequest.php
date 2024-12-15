@@ -23,7 +23,27 @@ class UpdateUserRequest extends FormRequest
 	public function rules(): array
 	{
 		return [
-			//
+			'name' => ['string', 'required'],
+			'username' => ['string', 'required', 'unique:users,username,'.$this->route()->parameter('user')->id],
+			'password' => ['string', 'nullable', 'exclude'],
+			'email' => ['email', 'required', 'unique:users,username,'.$this->route()->parameter('user')->id],
+			'bio' => ['string', 'nullable', 'max:50'],
+		];
+	}
+
+	public function messages(): array
+	{
+		return [
+			'name.string' => 'Name must be a string',
+			'name.required' => 'Name must be provided',
+			'username.string' => 'Username must be a string',
+			'username.required' => 'Username must be provided',
+			'username.unique' => 'Username must be unique',
+			'email.email' => 'E-mail must be valid email',
+			'email.required' => 'E-mail must be provided',
+			'email.unique' => 'E-mail must be unique',
+			'bio.string' => 'Bio must be a string',
+			'bio.max' => 'Bio must be no longer than :max characters'
 		];
 	}
 }

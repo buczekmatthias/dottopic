@@ -1,5 +1,13 @@
 <template>
     <div class="content">
+        <template v-if="currentUser">
+            <Link
+                :href="route('users.edit', { user: user.username })"
+                v-if="currentUser.username === user.username"
+            >
+                <Button> Edit profile </Button>
+            </Link>
+        </template>
         <div class="">
             <Link
                 :href="
@@ -21,6 +29,9 @@
 <script setup>
 import { Link } from "@inertiajs/vue3";
 import route from "@/Composables/Route";
+import currentUser from "@/Composables/User";
+
+import Button from "@/Components/Form/Button.vue";
 
 defineProps({
     user: Object,
