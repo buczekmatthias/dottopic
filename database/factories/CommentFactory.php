@@ -18,6 +18,7 @@ class CommentFactory extends Factory
 	{
 		return [
 			'content' => fake()->text(250),
+			'slug' => fake()->unique()->uuid()
 		];
 	}
 }

@@ -38,7 +38,8 @@ class ArticleController extends Controller implements HasMiddleware
 
 	public function show(Article $article): Response
 	{
-		$article->load(['author', 'comments', 'reactions', 'category']);
+		// TODO: Add pagination to comments
+		$article->load(['author', 'comments', 'comments.author', 'reactions', 'category']);
 
 		return inertia('Articles/Show', [
 			'article' => ArticleResource::make($article)

@@ -15,8 +15,14 @@ class Comment extends Model
 	/** @use HasFactory<\Database\Factories\CommentFactory> */
 	use HasFactory;
 
+	public function getRouteKeyName()
+	{
+		return 'slug';
+	}
+
 	protected $fillable = [
-		'content'
+		'content',
+		'slug'
 	];
 
 	public function author(): BelongsTo

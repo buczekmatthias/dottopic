@@ -86,7 +86,7 @@ class CategoryController extends Controller
 			return to_route('categories.index', status: 303);
 		}
 
-		return back();
+		return back(status: 303);
 	}
 
 	public function destroy(Category $category)
@@ -101,6 +101,6 @@ class CategoryController extends Controller
 
 		$category->delete();
 
-		return to_route('categories.index', 303);
+		return to_route('categories.index', status: 303);
 	}
 }

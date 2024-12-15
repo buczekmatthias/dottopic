@@ -82,7 +82,7 @@ class TagController extends Controller
 			return to_route('tags.index', status: 303);
 		}
 
-		return back();
+		return back(status:303);
 	}
 
 	public function destroy(Tag $tag)

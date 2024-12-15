@@ -110,7 +110,7 @@ class UserController extends Controller
 
 		$user->delete();
 
-		return to_route('homepage');
+		return to_route('homepage', status:303);
 	}
 
 	public function promote(User $user)
