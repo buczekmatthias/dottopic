@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ArticleResource;
 use App\Http\Resources\CompactArticleResource;
 use App\Models\Article;
+use App\Services\Reactions;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Response;
 
 class ArticleController extends Controller implements HasMiddleware
@@ -22,7 +24,7 @@ class ArticleController extends Controller implements HasMiddleware
 	public function index(): Response
 	{
 		return inertia('Articles/Index', [
-			'articles' => CompactArticleResource::collection(Article::with(['author', 'category'])->latest()->paginate(20))
+			'articles' => CompactArticleResource::collection(Article::with(['author', 'category'])->withCount('reactions')->latest()->paginate(20))
 		]);
 	}
 
@@ -38,11 +40,29 @@ class ArticleController extends Controller implements HasMiddleware
 
 	public function show(Article $article): Response
 	{
-		// TODO: Add pagination to comments
-		$article->load(['author', 'comments', 'comments.author', 'reactions', 'category']);
+		$article->load(['author', 'reactions', 'category']);
+		$article->comments = $article->comments()->with('author')->paginate(50, pageName:'comments');
+
+		$availableReactions = Reactions::getAvailableReactions();
+
+		$rc = [];
+
+		foreach ($availableReactions as $r => $c) {
+			$count = $article->reactions->where('content', $r)->count();
+
+			if ($count > 0) {
+				$rc[$r] = $count;
+			}
+		}
+
+		$article->reactions_count = [
+			'display' => array_keys(collect($rc)->sort(fn ($a, $b) => $b <=> $a)->slice(0, 3)->toArray()),
+			'count' => array_sum($rc)
+		];
 
 		return inertia('Articles/Show', [
-			'article' => ArticleResource::make($article)
+			'article' => ArticleResource::make($article),
+			'availableReactions' => $availableReactions
 		]);
 	}
 
@@ -62,6 +82,14 @@ class ArticleController extends Controller implements HasMiddleware
 
 	public function destroy(Article $article)
 	{
-		//
+		collect($article->content)->where('type', 'image')->pluck('content')->each(function ($img) use ($article) {
+			Storage::delete("articles/{$article->slug}/{$img}");
+		});
+		Storage::deleteDirectory("articles/{$article->slug}");
+
+		$article->reactions()->delete();
+		$article->delete();
+
+		return to_route('articles.index', status:303);
 	}
 }

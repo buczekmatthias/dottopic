@@ -30,8 +30,22 @@
                 <button>Save</button>
             </form>
         </template>
-        <p @click="editComment = true" v-else>Edit comment</p>
+        <p
+            @click="editComment = true"
+            v-if="
+                currentUser &&
+                currentUser.username === comment.author.username &&
+                !editComment
+            "
+        >
+            Edit comment
+        </p>
         <Link
+            v-if="
+                currentUser &&
+                (currentUser.isStaff ||
+                    currentUser.username === comment.author.username)
+            "
             :href="route('comments.destroy', { comment: comment.slug })"
             method="DELETE"
         >
@@ -45,6 +59,7 @@
 <script setup>
 import { ref } from "vue";
 import { useForm, Link } from "@inertiajs/vue3";
+import currentUser from "@/Composables/User";
 import route from "@/Composables/Route";
 
 import Textarea from "@/Components/Form/Textarea.vue";

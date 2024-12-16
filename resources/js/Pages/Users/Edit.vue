@@ -48,11 +48,6 @@
                 v-model="editUserForm.name"
             />
             <Input
-                label="Username"
-                :error="editUserForm.errors.username"
-                v-model="editUserForm.username"
-            />
-            <Input
                 label="E-mail"
                 :error="editUserForm.errors.email"
                 type="email"
@@ -108,7 +103,6 @@ const props = defineProps({
 
 const editUserForm = useForm({
     name: props.user.name,
-    username: props.user.username,
     email: props.user.email,
     password: "",
     bio: props.user.bio || "",

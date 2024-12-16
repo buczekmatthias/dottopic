@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Arr;
 
 class ArticleResource extends JsonResource
 {
@@ -14,11 +15,19 @@ class ArticleResource extends JsonResource
 	 */
 	public function toArray(Request $request): array
 	{
-		return [
+		$data = [
 			...CompactArticleResource::make($this)->toArray($request),
 			'content' => $this->content,
-			'comments' => CommentResource::collection($this->comments),
-			'reactions' => $this->reactions
+			'comments' => [
+				'data' => CommentResource::collection($this->comments->items()),
+				'pagination' => Arr::except($this->comments->toArray(), 'data')
+			],
 		];
+
+		if ($request->user()) {
+			$data['userReaction'] = $this->reactions->firstWhere('user_id', $request->user()->id)?->content;
+		}
+
+		return $data;
 	}
 }

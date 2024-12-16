@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 class Reaction extends Model
 {
 	protected $fillable = [
-		'content'
+		'content',
+		'user_id'
 	];
-	
 
 	public function user(): BelongsTo
 	{
