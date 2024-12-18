@@ -26,7 +26,8 @@ class Article extends Model
 		'title',
 		'slug',
 		'description',
-		'content'
+		'content',
+		'author_id'
 	];
 
 	public function author(): BelongsTo

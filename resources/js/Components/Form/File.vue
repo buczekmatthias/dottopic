@@ -2,7 +2,7 @@
     <div class="flex flex-col gap-0.5">
         <label class="flex flex-col gap-1.5">
             <slot>
-                <p>
+                <p v-if="label">
                     {{ label }}
                     <span v-if="required" class="text-red-600">*</span>
                 </p>

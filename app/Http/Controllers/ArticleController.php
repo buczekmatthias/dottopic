@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateArticleRequest;
+use App\Http\Requests\UpdateArticleRequest;
 use App\Http\Resources\ArticleResource;
 use App\Http\Resources\CompactArticleResource;
 use App\Models\Article;
+use App\Models\Category;
+use App\Models\Tag;
 use App\Services\Reactions;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Response;
+use Illuminate\Support\Str;
 
 class ArticleController extends Controller implements HasMiddleware
 {
@@ -30,12 +35,53 @@ class ArticleController extends Controller implements HasMiddleware
 
 	public function create(): Response
 	{
-		return inertia('Articles/Create');
+		return inertia('Articles/Create', [
+			'categories' => Category::select(['name', 'slug'])->alphabetically()->get(),
+			'tags' => Tag::select(['name', 'slug'])->alphabetically()->get(),
+			'mimes' => ['image/jpeg', 'image/png', 'image/webp', 'video/mp4', 'video/webm']
+		]);
 	}
 
-	public function store(Request $request)
+	public function store(CreateArticleRequest $request)
 	{
-		//
+		$data = $request->validated();
+
+		$article = Category::where('slug', $data['category_slug'])->first()->articles()->create([
+			'title' => $data['title'],
+			'slug' => Str::uuid(),
+			'content' => json_encode([]),
+			'description' => $data['description'],
+			'author_id' => Auth::user()->id
+		]);
+
+		try {
+			foreach ($data['content'] as &$content) {
+				if ($content['type'] === 'file') {
+					$file = $content['content'];
+					$name = Str::random(35).".".$file->extension();
+
+					Storage::putFileAs("articles/{$article->slug}", $file, $name);
+
+					$content['content'] = $name;
+				}
+			}
+
+			$article->content = json_encode($data['content']);
+			$article->tags()->sync(Tag::select('id')->whereIn('slug', $data['tags'])->pluck('id'));
+
+			$article->save();
+
+			return to_route('articles.show', ['article' => $article->slug]);
+		} catch (\Exception $e) {
+			collect($data['content'])->where('type', 'file')->pluck('content')->each(function ($file) use ($article) {
+				Storage::delete("articles/{$article->slug}/{$file}");
+			});
+			Storage::deleteDirectory("articles/{$article->slug}");
+
+			$article->delete();
+
+			return back()->withErrors(['err' => $e->getMessage()]);
+		}
 	}
 
 	public function show(Article $article): Response
@@ -75,19 +121,20 @@ class ArticleController extends Controller implements HasMiddleware
 		]);
 	}
 
-	public function update(Request $request, Article $article)
+	public function update(UpdateArticleRequest $request, Article $article)
 	{
 		//
 	}
 
 	public function destroy(Article $article)
 	{
-		collect($article->content)->where('type', 'image')->pluck('content')->each(function ($img) use ($article) {
-			Storage::delete("articles/{$article->slug}/{$img}");
+		collect($article->content)->where('type', 'file')->pluck('content')->each(function ($file) use ($article) {
+			Storage::delete("articles/{$article->slug}/{$file}");
 		});
 		Storage::deleteDirectory("articles/{$article->slug}");
 
 		$article->reactions()->delete();
+		$article->tags()->detach();
 		$article->delete();
 
 		return to_route('articles.index', status:303);

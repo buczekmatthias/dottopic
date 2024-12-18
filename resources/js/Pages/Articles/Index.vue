@@ -4,7 +4,7 @@
             :href="route('articles.create')"
             v-if="currentUser && currentUser.isStaff"
         >
-            <Button>Create new tag</Button>
+            <Button>Create new article</Button>
         </Link>
         {{ articles.data }}
         <br />
