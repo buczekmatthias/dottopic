@@ -30,7 +30,8 @@ Route::controller(UserController::class)->prefix('users')->name('users.update.im
 	Route::post('{user}/image', 'updateImage');
 	Route::delete('{user}/image', 'deleteImage');
 });
-Route::resource('articles', ArticleController::class);
+Route::post('/articles/{article}', [ArticleController::class, 'update'])->name('articles.update');
+Route::resource('articles', ArticleController::class)->except(['update']);
 Route::resource('categories', CategoryController::class)->only(['index', 'show']);
 Route::resource('tags', TagController::class)->only(['index', 'show']);
 

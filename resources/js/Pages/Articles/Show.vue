@@ -10,7 +10,7 @@
         <br />
         <br />
         <br />
-        <img :src="article.content[2].content" alt="" />
+        <!-- <img :src="article.content[2].content" alt="" /> -->
         <br />
         <Reactions
             type="article"

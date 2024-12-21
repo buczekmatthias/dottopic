@@ -10,8 +10,10 @@ use App\Models\Article;
 use App\Models\Category;
 use App\Models\Tag;
 use App\Services\Reactions;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Response;
@@ -86,7 +88,7 @@ class ArticleController extends Controller implements HasMiddleware
 
 	public function show(Article $article): Response
 	{
-		$article->load(['author', 'reactions', 'category']);
+		$article->load(['author', 'reactions', 'category', 'tags']);
 		$article->comments = $article->comments()->with('author')->paginate(50, pageName:'comments');
 
 		$availableReactions = Reactions::getAvailableReactions();
@@ -114,16 +116,61 @@ class ArticleController extends Controller implements HasMiddleware
 
 	public function edit(Article $article): Response
 	{
-		$article->load(['author', 'comments', 'reactions', 'category']);
+		$article->load(['author', 'comments', 'reactions', 'category', 'tags']);
 
 		return inertia('Articles/Edit', [
-			'article' => ArticleResource::make($article)
+			'article' => ArticleResource::make($article),
+			'categories' => Category::select(['name', 'slug'])->alphabetically()->get(),
+			'tags' => Tag::select(['name', 'slug'])->alphabetically()->get(),
+			'mimes' => ['image/jpeg', 'image/png', 'image/webp', 'video/mp4', 'video/webm']
 		]);
 	}
 
 	public function update(UpdateArticleRequest $request, Article $article)
 	{
-		//
+		$data = $request->validated();
+
+		$article->update([
+			'title' => $data['title'],
+			'description' => $data['description']
+		]);
+
+		$article->category_id = Category::select('id')->where('slug', $data['category_slug'])->first()->id;
+
+		foreach ($data['content'] as &$content) {
+			if ($content['type'] === 'file') {
+				if ($content['content'] instanceof UploadedFile) {
+					$file = $content['content'];
+					$name = Str::random(35).".".$file->extension();
+
+					Storage::putFileAs("articles/{$article->slug}", $file, $name);
+
+					$content['content'] = $name;
+				} else {
+					$content['content'] = Arr::last(explode("/", $content['content']));
+				}
+			}
+		}
+
+		if (Arr::exists($data, 'files_to_remove')) {
+			$oldContent = json_decode($article->content);
+
+			foreach ($data['files_to_remove'] as $f) {
+				if ($oldContent[$f]->type === 'file') {
+					Storage::delete("articles/{$article->slug}/{$oldContent[$f]->content}");
+					if ($key = array_search($f, array_column($data['content'], 'id'))) {
+						Arr::pull($data['content'], $key);
+					}
+				}
+			}
+		}
+
+		$article->content = json_encode($data['content']);
+		$article->tags()->sync(Tag::select('id')->whereIn('slug', $data['tags'])->pluck('id'));
+
+		$article->save();
+
+		return to_route('articles.show', ['article' => $article->slug]);
 	}
 
 	public function destroy(Article $article)

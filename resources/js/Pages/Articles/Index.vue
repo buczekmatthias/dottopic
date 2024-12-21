@@ -6,7 +6,13 @@
         >
             <Button>Create new article</Button>
         </Link>
-        {{ articles.data }}
+        <div v-for="article in articles.data" :key="article.slug" class="mb-4">
+            {{ article }}
+            <br />
+            <Link :href="route('articles.show', { article: article.slug })">
+                Show article
+            </Link>
+        </div>
         <br />
         <br />
         {{ articles.links }}

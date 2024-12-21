@@ -209,7 +209,10 @@ const handleFormSubmit = () => {
     articleCreateForm
         .transform((data) => ({
             ...data,
-            content: content.map((c) => delete c.id),
+            content: data.content.map((c) => {
+                delete c.id;
+                return c;
+            }),
         }))
         .post(route("articles.store"));
 };

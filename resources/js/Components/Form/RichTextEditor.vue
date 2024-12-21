@@ -141,6 +141,9 @@ const editor = useEditor({
             defaultProtocol: "https",
         }),
     ],
+    onUpdate: ({ editor }) => {
+        model.value = editor.getHTML();
+    },
 });
 
 const setLink = () => {

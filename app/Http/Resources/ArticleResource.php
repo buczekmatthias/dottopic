@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\MissingValue;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
@@ -21,7 +22,9 @@ class ArticleResource extends JsonResource
 		$content = $content->map(function ($c, $i) {
 			$c->id = $i;
 			if ($c->type === 'file') {
-				$c->content = asset(Storage::url("articles/{$this->slug}/{$c->content}"));
+				$filePath = "articles/{$this->slug}/{$c->content}";
+				$c->content = asset(Storage::url($filePath));
+				$c->fileMime = Storage::mimeType($filePath);
 			}
 
 			return $c;
@@ -31,6 +34,10 @@ class ArticleResource extends JsonResource
 			...CompactArticleResource::make($this)->toArray($request),
 			'content' => $content,
 		];
+
+		if (!($this->whenLoaded('tags') instanceof MissingValue)) {
+			$data['tags'] = collect($this->tags)->map(fn ($t) => ['name' => $t->name, 'slug' => $t->slug]);
+		}
 
 		if ($this->comments instanceof LengthAwarePaginator) {
 			$data['comments'] = [
