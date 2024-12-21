@@ -20,8 +20,4 @@ textarea {
     .content {
         @apply bg-white rounded-md w-full max-w-7xl mx-auto p-2.5;
     }
-
-    .icon {
-        @apply h-5 fill-indigo-600;
-    }
 }

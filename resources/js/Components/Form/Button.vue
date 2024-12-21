@@ -1,5 +1,6 @@
 <template>
     <button
+        :type="type"
         :disabled="isDisabled || isProcessing"
         class="enabled:bg-indigo-700 disabled:bg-indigo-800 text-indigo-50 enabled:hover:bg-indigo-600 flex items-center justify-center gap-3 rounded-md p-3 enabled:cursor-pointer disabled:cursor-not-allowed"
         :class="extraClasses"
@@ -18,6 +19,7 @@
 import Loader from "@/Components/Loader.vue";
 
 defineProps({
+    type: { type: String, default: "submit" },
     isDisabled: { type: Boolean, default: false },
     isProcessing: { type: Boolean, default: false },
     processingText: String,

@@ -4,6 +4,13 @@
         <p class="font-light text-slate-500 mt-1">
             To enjoy all basic features
         </p>
+        <!-- TODO: Remove in ready app -->
+        <Link
+            :href="route('security.login')"
+            method="POST"
+            :data="{ email: 'hazy@test.com', password: 'test' }"
+            >Login as dev</Link
+        >
         <form
             @submit.prevent="loginForm.post(route('security.login'))"
             class="my-5 flex flex-col gap-3"

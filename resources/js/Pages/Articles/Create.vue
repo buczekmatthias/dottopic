@@ -1,7 +1,6 @@
 <template>
     <div class="content">
-        <form @submit.prevent="articleCreateForm.post(route('articles.store'))">
-            {{ articleCreateForm.errors }}
+        <form @submit.prevent="handleFormSubmit">
             <Input
                 label="Title"
                 :error="articleCreateForm.errors.title"
@@ -13,7 +12,8 @@
                 :error="articleCreateForm.errors.category_slug"
                 v-model="articleCreateForm.category_slug"
             />
-            <Textarea
+
+            <RichTextEditor
                 label="Description"
                 :error="articleCreateForm.errors.description"
                 v-model="articleCreateForm.description"
@@ -24,17 +24,44 @@
                 :error="articleCreateForm.errors.tags"
                 v-model="articleCreateForm.tags"
             />
-            {{ articleCreateForm.tags }}
             <div>
                 <template
                     v-for="(content, i) in articleCreateForm.content"
                     :key="content.id"
                 >
-                    <!-- TODO: Add proper error handling -->
-                    <!-- TODO: Add moving up and down content elements -->
                     <template v-if="content.type === 'header'">
                         <div>
-                            <Input :error="null" v-model="content.content" />
+                            <Button
+                                type="button"
+                                @click="swap(i, i - 1)"
+                                :disabled="i === 0"
+                            >
+                                <Icon
+                                    icon="octicon:chevron-up-12"
+                                    width="12"
+                                    height="12"
+                                />
+                            </Button>
+                            <Button
+                                type="button"
+                                @click="swap(i, i + 1)"
+                                :disabled="
+                                    i === articleCreateForm.content.length - 1
+                                "
+                            >
+                                <Icon
+                                    icon="octicon:chevron-down-12"
+                                    width="12"
+                                    height="12"
+                                />
+                            </Button>
+                            <Input
+                                :error="
+                                    articleCreateForm.errors.content?.[i]
+                                        .content
+                                "
+                                v-model="content.content"
+                            />
                             <p @click="removeContentElement(content.id)">
                                 Remove
                             </p>
@@ -42,7 +69,37 @@
                     </template>
                     <template v-else-if="content.type === 'text'">
                         <div>
-                            <Textarea :error="null" v-model="content.content" />
+                            <Button
+                                type="button"
+                                @click="swap(i, i - 1)"
+                                :disabled="i === 0"
+                            >
+                                <Icon
+                                    icon="octicon:chevron-up-12"
+                                    width="12"
+                                    height="12"
+                                />
+                            </Button>
+                            <Button
+                                type="button"
+                                @click="swap(i, i + 1)"
+                                :disabled="
+                                    i === articleCreateForm.content.length - 1
+                                "
+                            >
+                                <Icon
+                                    icon="octicon:chevron-down-12"
+                                    width="12"
+                                    height="12"
+                                />
+                            </Button>
+                            <RichTextEditor
+                                :error="
+                                    articleCreateForm.errors.content?.[i]
+                                        .content
+                                "
+                                v-model="content.content"
+                            />
                             <p @click="removeContentElement(content.id)">
                                 Remove
                             </p>
@@ -50,9 +107,36 @@
                     </template>
                     <template v-else>
                         <div>
+                            <Button
+                                type="button"
+                                @click="swap(i, i - 1)"
+                                :disabled="i === 0"
+                            >
+                                <Icon
+                                    icon="octicon:chevron-up-12"
+                                    width="12"
+                                    height="12"
+                                />
+                            </Button>
+                            <Button
+                                type="button"
+                                @click="swap(i, i + 1)"
+                                :disabled="
+                                    i === articleCreateForm.content.length - 1
+                                "
+                            >
+                                <Icon
+                                    icon="octicon:chevron-down-12"
+                                    width="12"
+                                    height="12"
+                                />
+                            </Button>
                             <File
                                 :mimes="mimes"
-                                :error="null"
+                                :error="
+                                    articleCreateForm.errors.content?.[i]
+                                        .content
+                                "
                                 @changeFile="content.content = $event[0]"
                             />
                             <p @click="removeContentElement(content.id)">
@@ -63,7 +147,6 @@
                 </template>
             </div>
             <ArticleContentTypePicker @typePicked="handleNewPick" />
-            {{ articleCreateForm.content }}
             <!-- TODO: Disable all buttons in forms until form is valid -->
             <Button
                 :isProcessing="articleCreateForm.processing"
@@ -80,9 +163,11 @@ import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import route from "@/Composables/Route";
 
+import { Icon } from "@iconify/vue";
+
 import ArticleContentTypePicker from "@/Components/Form/ArticleContentTypePicker.vue";
 import Input from "@/Components/Form/Input.vue";
-import Textarea from "@/Components/Form/Textarea.vue";
+import RichTextEditor from "@/Components/Form/RichTextEditor.vue";
 import File from "@/Components/Form/File.vue";
 import Select from "@/Components/Form/Select.vue";
 import MultiSelect from "@/Components/Form/MultiSelect.vue";
@@ -118,5 +203,20 @@ const removeContentElement = (id) => {
     articleCreateForm.content = articleCreateForm.content.filter(
         (content) => content.id !== id
     );
+};
+
+const handleFormSubmit = () => {
+    articleCreateForm
+        .transform((data) => ({
+            ...data,
+            content: content.map((c) => delete c.id),
+        }))
+        .post(route("articles.store"));
+};
+
+const swap = (index, newIndex) => {
+    let temp = articleCreateForm.content[index];
+    articleCreateForm.content[index] = articleCreateForm.content[newIndex];
+    articleCreateForm.content[newIndex] = temp;
 };
 </script>

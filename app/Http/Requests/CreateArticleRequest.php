@@ -50,6 +50,7 @@ class CreateArticleRequest extends FormRequest
 			'content.*.type.string' => 'Content item type must be string',
 			'content.*.type.required' => 'Content item type must be provided',
 			'content.*.type.in' => 'Content item type must be in array of :values',
+			'content.*.array' => 'Content item must be an array',
 			'content.*.content.string_or_file' => 'Content item content must be string or file',
 			'content.*.content.required' => 'Content item content must be provided',
 			'category_slug.string' => 'Category slug must be string',

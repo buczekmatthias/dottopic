@@ -19,10 +19,15 @@
                 :key="link.route"
                 class="p-2.5 lg:py-3 lg:px-6 rounded-md"
                 :class="{
-                    'bg-indigo-700 [&>*]:fill-white': isActiveRoute(link.route),
+                    'bg-indigo-700 [&>*]:text-white': isActiveRoute(link.route),
                 }"
             >
-                <component :is="link.icon"></component>
+                <Icon
+                    :icon="link.icon"
+                    width="24"
+                    height="24"
+                    class="text-indigo-600"
+                />
             </Link>
         </div>
         <div class="p-2.5 lg:p-5 flex flex-col gap-3">
@@ -36,34 +41,31 @@
 import { Link } from "@inertiajs/vue3";
 import route, { isActiveRoute } from "@/Composables/Route";
 
+import { Icon } from "@iconify/vue";
+
 import NavigationUserBox from "@/Components/NavigationUserBox.vue";
-import Home from "@/Components/Icons/Home.vue";
-import Article from "@/Components/Icons/Article.vue";
-import Category from "@/Components/Icons/Category.vue";
-import Tag from "@/Components/Icons/Tag.vue";
-import User from "@/Components/Icons/User.vue";
 import Breadcrumbs from "@/Components/Breadcrumbs.vue";
 
 const navigation = [
     {
         route: "homepage",
-        icon: Home,
+        icon: "octicon:home-16",
     },
     {
         route: "articles.index",
-        icon: Article,
+        icon: "octicon:file",
     },
     {
         route: "categories.index",
-        icon: Category,
+        icon: "octicon:file-directory-16",
     },
     {
         route: "tags.index",
-        icon: Tag,
+        icon: "octicon:tag-16",
     },
     {
         route: "users.index",
-        icon: User,
+        icon: "octicon:person-16",
     },
 ];
 </script>
