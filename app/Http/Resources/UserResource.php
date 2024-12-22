@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class UserResource extends JsonResource
@@ -20,7 +21,7 @@ class UserResource extends JsonResource
 		$data = [
 			'name' => $this->name,
 			'username' => $this->username,
-			'image' => $this->image,
+			'image' => asset(Storage::url("pfp/{$this->image}")),
 			'initials' => $this->initials,
 			'bio' => $this->bio,
 			'role' => Str::ucfirst($this->role->value),

@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\UserActions;
 use App\Enum\UserRole;
 use App\Http\Requests\UpdateUserImageRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserEditResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Response;
-use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -58,28 +60,24 @@ class UserController extends Controller
 		]);
 	}
 
-	public function update(UpdateUserRequest $request, User $user)
+	public function update(UpdateUserRequest $request, User $user): RedirectResponse
 	{
 		$data = $request->validated();
 
 		if ($request->post('password') !== null) {
 			$data['password'] = Hash::make($request->post('password'));
 		}
-		$user->update($data);
+		DB::transaction(function () use ($user, $data) {
+			$user->update($data);
+		});
 
-		return to_route('users.show', ['user' => $user->username], 303);
+		return to_route('users.show', ['user' => $user->username], status: 303);
 	}
 
-	public function updateImage(UpdateUserImageRequest $request, User $user)
+	public function updateImage(UpdateUserImageRequest $request, User $user): RedirectResponse
 	{
-		$img = $request->file('image');
-		$name = Str::random(35).".".$img->extension();
-
 		try {
-			Storage::putFileAs("pfp", $img, $name);
-
-			$user->image = $name;
-			$user->save();
+			UserActions::updateProfilePicture($request->validated()['image'], $user);
 		} catch (\Exception $e) {
 			return back()->withErrors(['err' => $e->getMessage()]);
 		}
@@ -87,7 +85,7 @@ class UserController extends Controller
 		return to_route('users.show', ['user' => $user->username]);
 	}
 
-	public function deleteImage(User $user)
+	public function deleteImage(User $user): RedirectResponse
 	{
 		Storage::delete("pfp/{$user->image}");
 
@@ -97,20 +95,11 @@ class UserController extends Controller
 		return back();
 	}
 
-	public function destroy(User $user)
+	public function destroy(User $user): RedirectResponse
 	{
-		$user->articles()->get()->each(function ($article) {
-			$article->author_id = null;
-			$article->save();
-		});
-		$user->comments()->get()->each(function ($comment) {
-			$comment->author_id = null;
-			$comment->save();
-		});
+		UserActions::destroyUser($user);
 
-		$user->delete();
-
-		return to_route('homepage', status:303);
+		return to_route('homepage', status: 303);
 	}
 
 	public function promote(User $user)

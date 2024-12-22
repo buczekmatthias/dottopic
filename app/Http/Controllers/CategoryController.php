@@ -2,25 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\CategoryActions;
 use App\Http\Requests\CreateCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Models\Tag;
-use App\Services\SlugGenerator;
-use Illuminate\Support\Arr;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Response;
 
 class CategoryController extends Controller
 {
 	public function index(): Response
 	{
-		$categories = Category::alphabetically()->paginate(3);
-
-		Arr::map($categories->items(), fn ($c) => $c->articles = $c->articles()->with(['author'])->paginate(10, pageName: "{$c->slug}-page"));
-
 		return inertia('Categories/Index', [
-			'categories' => CategoryResource::collection($categories)
+			'categories' => CategoryResource::collection(CategoryActions::getPaginatedCategoriesWithContent())
 		]);
 	}
 
@@ -31,23 +27,11 @@ class CategoryController extends Controller
 		]);
 	}
 
-	public function store(CreateCategoryRequest $request)
+	public function store(CreateCategoryRequest $request): RedirectResponse
 	{
-		$category = Category::create([
-			'name' => $request->post('name'),
-			'slug' => SlugGenerator::generate($request->post('name'))
-		]);
+		CategoryActions::storeNewCategory($request->validated());
 
-		if ($category->id) {
-			$tags = Tag::select('id')->whereIn('name', $request->post('tags'))->get();
-			$category->tags()->sync($tags);
-
-			$category->save();
-
-			return to_route('categories.index');
-		}
-
-		return back();
+		return to_route('categories.index');
 	}
 
 	public function show(Category $category): Response
@@ -69,37 +53,16 @@ class CategoryController extends Controller
 		]);
 	}
 
-	public function update(UpdateCategoryRequest $request, Category $category)
+	public function update(UpdateCategoryRequest $request, Category $category): RedirectResponse
 	{
-		$category->update([
-			'name' => $request->post('name'),
-			'slug' => SlugGenerator::generate($request->post('name'))
-		]);
+		CategoryActions::updateCategory($request->validated(), $category);
 
-		$tags = Tag::select('id')->whereIn('name', $request->post('tags'))->get();
-
-		$category->tags()->sync($tags);
-
-		$category->save();
-
-		if (Category::select('id')->where('name', $request->post('name'))->first()) {
-			return to_route('categories.index', status: 303);
-		}
-
-		return back(status: 303);
+		return to_route('categories.index', status: 303);
 	}
 
-	public function destroy(Category $category)
+	public function destroy(Category $category): RedirectResponse
 	{
-		$category->tags()->detach();
-
-		collect($category->articles)->each(function ($article) {
-			$article->category_id = null;
-
-			$article->save();
-		});
-
-		$category->delete();
+		CategoryActions::destroyCategory($category);
 
 		return to_route('categories.index', status: 303);
 	}

@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\TagActions;
 use App\Http\Requests\CreateTagRequest;
 use App\Http\Requests\UpdateTagRequest;
 use App\Http\Resources\TagResource;
 use App\Models\Category;
 use App\Models\Tag;
-use App\Services\SlugGenerator;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Response;
 
 class TagController extends Controller
@@ -26,23 +27,11 @@ class TagController extends Controller
 		]);
 	}
 
-	public function store(CreateTagRequest $request)
+	public function store(CreateTagRequest $request): RedirectResponse
 	{
-		$tag = Tag::create([
-			'name' => $request->post('name'),
-			'slug' => SlugGenerator::generate($request->post('name'))
-		]);
+		TagActions::storeNewTag($request->validated());
 
-		if ($tag->id) {
-			$categories = Category::select('id')->whereIn('name', $request->post('categories'))->get();
-			$tag->categories()->sync($categories);
-
-			$tag->save();
-
-			return to_route('tags.index');
-		}
-
-		return back();
+		return to_route('tags.index');
 	}
 
 	public function show(Tag $tag): Response
@@ -65,27 +54,14 @@ class TagController extends Controller
 		]);
 	}
 
-	public function update(UpdateTagRequest $request, Tag $tag)
+	public function update(UpdateTagRequest $request, Tag $tag): RedirectResponse
 	{
-		$tag->update([
-			'name' => $request->post('name'),
-			'slug' => SlugGenerator::generate($request->post('name'))
-		]);
+		TagActions::updateTag($request->validated(), $tag);
 
-		$categories = Category::select('id')->whereIn('name', $request->post('categories'))->get();
-
-		$tag->categories()->sync($categories);
-
-		$tag->save();
-
-		if (Tag::select('id')->where('name', $request->post('name'))->first()) {
-			return to_route('tags.index', status: 303);
-		}
-
-		return back(status:303);
+		return to_route('tags.index', status: 303);
 	}
 
-	public function destroy(Tag $tag)
+	public function destroy(Tag $tag): RedirectResponse
 	{
 		$tag->delete();
 

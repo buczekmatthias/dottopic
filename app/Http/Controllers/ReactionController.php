@@ -2,38 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\ReactionActions;
 use App\Http\Requests\CreateReactionRequest;
-use App\Models\Reaction;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use App\Http\Requests\DestroyReactionRequest;
+use Illuminate\Http\RedirectResponse;
 
 class ReactionController extends Controller
 {
-	public function store(CreateReactionRequest $request)
+	public function store(CreateReactionRequest $request): RedirectResponse
 	{
-		$data = $request->validated();
-		$model = "\\App\\Models\\".Str::ucfirst($data['model']);
-
-		$model::where('slug', $data['slug'])->first()->reactions()->create([
-			'content' => $data['reaction'],
-			'user_id' => $request->user()->id,
-		]);
+		ReactionActions::handleReaction($request->validated(), isNewReaction: true);
 
 		return back();
 	}
 
-	public function destroy(Request $request, string $slug)
+	public function destroy(DestroyReactionRequest $request, string $slug): RedirectResponse
 	{
-		$data = $request->validate(['model' => ['string', 'required', 'in:article,comment']]);
-		if ($data) {
-			$model = "App\\Models\\".Str::ucfirst($data['model']);
-			Reaction::where([
-				['reactionable_id', "\\{$model}"::select('id')->where('slug', $slug)->first()->id],
-				['reactionable_type', $model],
-				['user_id', $request->user()->id]
-			])->first()->delete();
-		}
+		ReactionActions::handleReaction(
+			[
+				...$request->validated(),
+				'slug' => $slug
+			],
+			isNewReaction: false
+		);
 
-		return back(status:303);
+		return back(status: 303);
 	}
 }
