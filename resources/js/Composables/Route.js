@@ -14,4 +14,6 @@ const currentRoute = () => usePage().props.routes.current;
 
 const isActiveRoute = (r) => r === currentRoute();
 
-export { currentRoute, isActiveRoute };
+const isCurrentRouteInGroup = (r) => currentRoute().includes(r);
+
+export { currentRoute, isActiveRoute, isCurrentRouteInGroup };

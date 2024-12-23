@@ -39,7 +39,7 @@ Route::resource('comments', CommentController::class)->middleware('auth')->only(
 Route::resource('reactions', ReactionController::class)->middleware('auth')->only(['store', 'destroy']);
 
 Route::prefix('admin')->name('admin.')->middleware('mod')->group(function () {
-	Route::get('/', [AppController::class, 'adminDashboard'])->name('dashboard');
+	Route::get('/dashboard', [AppController::class, 'adminDashboard'])->name('dashboard');
 	Route::resource('categories', CategoryController::class)->except(['index', 'show']);
 	Route::resource('tags', TagController::class)->except(['index', 'show']);
 

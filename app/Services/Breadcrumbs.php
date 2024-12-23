@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Session;
 
 final class Breadcrumbs
 {
-	// TODO: Make crumbs as links
 	public static function getBreadcrumbs(): array
 	{
 		return Session::get('breadcrumbs', []);

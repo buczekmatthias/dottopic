@@ -21,7 +21,8 @@ class AppController extends Controller
 		]);
 	}
 
-	public function adminDashboard()
+	public function adminDashboard(): Response
 	{
+		return inertia('Admin/Dashboard');
 	}
 }

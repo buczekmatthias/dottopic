@@ -1,5 +1,6 @@
 <template>
     <div class="content">
+        {{ usePage().props.routes }}
         <Deferred data="latest_articles">
             <template #fallback>
                 <p>Loading latest articles...</p>
@@ -11,7 +12,7 @@
 </template>
 
 <script setup>
-import { Deferred } from "@inertiajs/vue3";
+import { Deferred, usePage } from "@inertiajs/vue3";
 
 defineProps({
     latest_articles: Object,
