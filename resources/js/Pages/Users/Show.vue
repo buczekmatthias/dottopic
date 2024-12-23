@@ -23,11 +23,18 @@
             </Link>
         </div>
         {{ user }}
+        <Deferred data="content">
+            <template #fallback>
+                <p>Loading {{ tab }}...</p>
+            </template>
+
+            {{ content }}
+        </Deferred>
     </div>
 </template>
 
 <script setup>
-import { Link } from "@inertiajs/vue3";
+import { Link, Deferred } from "@inertiajs/vue3";
 import route from "@/Composables/Route";
 import currentUser from "@/Composables/User";
 
@@ -35,5 +42,7 @@ import Button from "@/Components/Form/Button.vue";
 
 defineProps({
     user: Object,
+    content: Object,
+    tab: String,
 });
 </script>

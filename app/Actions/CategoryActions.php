@@ -7,17 +7,24 @@ use App\Models\Tag;
 use App\Services\SlugGenerator;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 final class CategoryActions
 {
-	public static function getPaginatedCategoriesWithContent(): LengthAwarePaginator
+	public static function getPaginatedCategoriesWithContent(int $page): LengthAwarePaginator
 	{
-		$categories = Category::alphabetically()->paginate(3);
+		return Cache::flexible(
+			"categories-{$page}",
+			[10, 20],
+			function () {
+				$categories = Category::alphabetically()->paginate(3);
 
-		Arr::map($categories->items(), fn ($c) => $c->articles = $c->articles()->with(['author'])->paginate(10, pageName: "{$c->slug}-page"));
+				Arr::map($categories->items(), fn ($c) => $c->articles = $c->articles()->with(['author'])->paginate(10, pageName: "{$c->slug}-page"));
 
-		return $categories;
+				return $categories;
+			}
+		);
 	}
 
 	public static function storeNewCategory(array $data): void

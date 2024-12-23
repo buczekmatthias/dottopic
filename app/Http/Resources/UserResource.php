@@ -4,8 +4,6 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -18,7 +16,7 @@ class UserResource extends JsonResource
 	 */
 	public function toArray(Request $request): array
 	{
-		$data = [
+		return [
 			'name' => $this->name,
 			'username' => $this->username,
 			'image' => asset(Storage::url("pfp/{$this->image}")),
@@ -28,21 +26,5 @@ class UserResource extends JsonResource
 			'articles_count' => $this->whenCounted('articles'),
 			'comments_count' => $this->whenCounted('comments'),
 		];
-
-		if ($this->articles instanceof LengthAwarePaginator) {
-			$data['articles'] = [
-				'data' => CompactArticleResource::collection($this->articles->items()),
-				'pagination' => Arr::except($this->articles->toArray(), 'data')
-			];
-		}
-
-		if ($this->comments instanceof LengthAwarePaginator) {
-			$data['comments'] = [
-				'data' => CommentResource::collection($this->comments->items()),
-				'pagination' => Arr::except($this->comments->toArray(), 'data')
-			];
-		}
-
-		return $data;
 	}
 }

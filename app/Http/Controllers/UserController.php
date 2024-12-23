@@ -14,26 +14,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
 use Inertia\Response;
 
 class UserController extends Controller
 {
 	public function index(Request $request): Response
 	{
-		$users = User::withCount(['articles', 'comments']);
-
-		$type = $request->get('type');
-
-		if ($type) {
-			if (in_array($type, UserRole::values())) {
-				$users->type($type);
-			} else {
-				return to_route('users.index');
-			}
-		}
-
 		return inertia('Users/Index', [
-			'users' => UserResource::collection($users->paginate(50)),
+			'users' => Inertia::defer(fn () => UserActions::getUsersList($request->get('type', ''), $request->get('page', 1))),
 			'types' => UserRole::values()
 		]);
 	}
@@ -42,13 +31,16 @@ class UserController extends Controller
 	{
 		$tab = $request->get('tab', 'articles');
 
-		match ($tab) {
-			'articles' => $user->articles = $user->articles()->with('category')->paginate(30),
-			'comments' => $user->comments = $user->comments()->with('article')->paginate(50),
-		};
-
 		return inertia('Users/Show', [
-			'user' => UserResource::make($user)
+			'user' => UserResource::make($user),
+			'content' => Inertia::defer(function () use ($tab, $user) {
+				return $tab === 'articles'
+				?
+				$user->articles()->with('category')->paginate(30)
+				:
+				$user->comments()->with('article')->paginate(50);
+			}),
+			'tab' => $tab
 		]);
 	}
 

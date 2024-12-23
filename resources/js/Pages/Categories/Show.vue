@@ -1,17 +1,25 @@
 <template>
     <div class="content">
-        <Link
-            :href="route('admin.categories.edit', { category: category.slug })"
-            v-if="currentUser && currentUser.isStaff"
-        >
-            <Button>Update category</Button>
-        </Link>
-        {{ category.articles }}
+        <Deferred data="category">
+            <Link
+                :href="
+                    route('admin.categories.edit', { category: category.slug })
+                "
+                v-if="currentUser && currentUser.isStaff"
+            >
+                <Button>Update category</Button>
+            </Link>
+            <template #fallback>
+                <p>Loading category...</p>
+            </template>
+
+            {{ category.articles }}
+        </Deferred>
     </div>
 </template>
 
 <script setup>
-import { Link } from "@inertiajs/vue3";
+import { Link, Deferred } from "@inertiajs/vue3";
 import currentUser from "@/Composables/User";
 import route from "@/Composables/Route";
 

@@ -4,6 +4,7 @@
             <Link :href="route('users.index')">All</Link>
             <Link
                 :href="route('users.index', { type: userType })"
+                :only="['users']"
                 v-for="userType in types"
                 :key="userType"
                 class="capitalize"
@@ -11,17 +12,25 @@
                 {{ userType + "s" }}
             </Link>
         </div>
-        <div class="" v-for="user in users.data" :key="user.username">
-            {{ user }}
-            <Link :href="route('users.show', { user: user.username })">
-                Profile
+        <Deferred data="users">
+            <template #fallback>
+                <p>Loading users...</p>
+            </template>
+            <Link v-for="(url, key) in users.links" :href="url">
+                {{ key }}
             </Link>
-        </div>
+            <div class="" v-for="user in users.data" :key="user.username">
+                {{ user }}
+                <Link :href="route('users.show', { user: user.username })">
+                    Profile
+                </Link>
+            </div>
+        </Deferred>
     </div>
 </template>
 
 <script setup>
-import { Link } from "@inertiajs/vue3";
+import { Link, Deferred } from "@inertiajs/vue3";
 import route from "@/Composables/Route";
 
 defineProps({

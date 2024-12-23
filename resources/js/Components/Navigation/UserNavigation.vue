@@ -43,8 +43,8 @@ import route, { isActiveRoute } from "@/Composables/Route";
 
 import { Icon } from "@iconify/vue";
 
-import NavigationUserBox from "@/Components/NavigationUserBox.vue";
-import Breadcrumbs from "@/Components/Breadcrumbs.vue";
+import NavigationUserBox from "@/Components/UI/NavigationUserBox.vue";
+import Breadcrumbs from "@/Components/UI/Breadcrumbs.vue";
 
 const navigation = [
     {

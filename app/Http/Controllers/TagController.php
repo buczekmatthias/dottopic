@@ -9,14 +9,25 @@ use App\Http\Resources\TagResource;
 use App\Models\Category;
 use App\Models\Tag;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Inertia\Inertia;
 use Inertia\Response;
 
 class TagController extends Controller
 {
-	public function index(): Response
+	public function index(Request $request): Response
 	{
+		$page = $request->get('page', 1);
+
+		$tags = Cache::flexible(
+			"tags-{$page}",
+			[15, 30],
+			fn () => Tag::select(['name', 'slug'])->withCount(['articles', 'categories'])->alphabetically()->paginate(100)
+		);
+
 		return inertia('Tags/Index', [
-			'tags' => Tag::select(['name', 'slug'])->withCount(['articles', 'categories'])->alphabetically()->paginate(100)
+			'tags' => Inertia::defer(fn () => $tags)
 		]);
 	}
 
@@ -36,11 +47,19 @@ class TagController extends Controller
 
 	public function show(Tag $tag): Response
 	{
-		$tag->articles = $tag->articles()->with(['author', 'category'])->paginate(20, pageName: 'articlesPage');
-		$tag->categories = $tag->categories()->paginate(30, pageName: 'categoriesPage');
+		$t = Cache::flexible(
+			"tag-{$tag->slug}",
+			[10, 20],
+			function () use ($tag) {
+				$tag->articles = $tag->articles()->with(['author', 'category'])->paginate(20, pageName: 'articlesPage');
+				$tag->categories = $tag->categories()->paginate(30, pageName: 'categoriesPage');
+
+				return $tag;
+			}
+		);
 
 		return inertia('Tags/Show', [
-			'tag' => TagResource::make($tag)
+			'tag' => Inertia::defer(fn () => TagResource::make($t))
 		]);
 	}
 

@@ -6,24 +6,34 @@
         >
             <Button>Create new article</Button>
         </Link>
-        <div v-for="article in articles.data" :key="article.slug" class="mb-4">
-            {{ article }}
+        <Deferred data="articles">
+            <template #fallback>
+                <p>Loading articles..</p>
+            </template>
+
+            <div
+                v-for="article in articles.data"
+                :key="article.slug"
+                class="mb-4"
+            >
+                {{ article }}
+                <br />
+                <Link :href="route('articles.show', { article: article.slug })">
+                    Show article
+                </Link>
+            </div>
             <br />
-            <Link :href="route('articles.show', { article: article.slug })">
-                Show article
-            </Link>
-        </div>
-        <br />
-        <br />
-        {{ articles.links }}
-        <br />
-        <br />
-        {{ articles.meta }}
+            <br />
+            {{ articles.links }}
+            <br />
+            <br />
+            {{ articles.meta }}
+        </Deferred>
     </div>
 </template>
 
 <script setup>
-import { Link } from "@inertiajs/vue3";
+import { Link, Deferred } from "@inertiajs/vue3";
 import route from "@/Composables/Route";
 import currentUser from "@/Composables/User";
 

@@ -20,7 +20,8 @@ class CompactArticleResource extends JsonResource
 			'slug' => $this->slug,
 			'description' => $this->description,
 			'created_at' => $this->created_at->format('F jS, Y'),
-			'reactions_count' => $this->whenCounted('reactions')
+			'reactions_count' => $this->whenCounted('reactions'),
+			'comments_count' => $this->whenCounted('comments')
 		];
 
 		if (!($this->whenLoaded('author') instanceof MissingValue)) {
