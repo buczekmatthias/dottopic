@@ -19,7 +19,7 @@ class CompactArticleResource extends JsonResource
 			'title' => $this->title,
 			'slug' => $this->slug,
 			'description' => $this->description,
-			'created_at' => $this->created_at->format('F jS, Y'),
+			'created_at' => $this->created_at->format('F j, Y'),
 			'reactions_count' => $this->whenCounted('reactions'),
 			'comments_count' => $this->whenCounted('comments')
 		];

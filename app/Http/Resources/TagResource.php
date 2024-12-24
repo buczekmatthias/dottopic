@@ -4,7 +4,6 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Arr;
 
 class TagResource extends JsonResource
 {
@@ -18,14 +17,8 @@ class TagResource extends JsonResource
 		return [
 			'name' => $this->name,
 			'slug' => $this->slug,
-			'articles' => [
-				'data' => CompactArticleResource::collection($this->articles->items()),
-				'pagination' => Arr::except($this->articles->toArray(), 'data')
-			],
-			'categories' => [
-				'data' => collect($this->categories->items())->map(fn ($cat) => ['name' => $cat->name, 'slug' => $cat->slug]),
-				'pagination' => Arr::except($this->categories->toArray(), 'data')
-			],
+			'articles_count' => $this->whenCounted('articles'),
+			'categories_count' => $this->whenCounted('categories')
 		];
 	}
 }

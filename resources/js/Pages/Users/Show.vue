@@ -28,7 +28,19 @@
                 <p>Loading {{ tab }}...</p>
             </template>
 
-            {{ content }}
+            <template v-if="tab === 'articles'">
+                <Article
+                    v-for="article in content.data"
+                    :key="article.slug"
+                    :article="article"
+                />
+            </template>
+            <template v-else>
+                <div>
+                    {{ content }}
+                </div>
+            </template>
+            <Pagination :links="content.links" :pagination="content.meta" />
         </Deferred>
     </div>
 </template>
@@ -39,6 +51,8 @@ import route from "@/Composables/Route";
 import currentUser from "@/Composables/User";
 
 import Button from "@/Components/Form/Button.vue";
+import Article from "@/Components/UI/Article.vue";
+import Pagination from "@/Components/Pagination.vue";
 
 defineProps({
     user: Object,

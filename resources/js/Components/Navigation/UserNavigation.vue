@@ -55,7 +55,7 @@
                 />
             </Link>
         </div>
-        <div class="p-2.5 lg:p-5 flex flex-col gap-3 w-full max-w-7xl mx-auto">
+        <div class="p-2.5 lg:p-5 flex flex-col gap-6 w-full max-w-7xl mx-auto">
             <Breadcrumbs />
             <slot />
         </div>

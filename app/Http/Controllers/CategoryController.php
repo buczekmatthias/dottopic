@@ -6,20 +6,19 @@ use App\Actions\CategoryActions;
 use App\Http\Requests\CreateCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Http\Resources\CategoryResource;
+use App\Http\Resources\CompactArticleResource;
 use App\Models\Category;
 use App\Models\Tag;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class CategoryController extends Controller
 {
-	public function index(Request $request): Response
+	public function index(): Response
 	{
 		return inertia('Categories/Index', [
-			'categories' => Inertia::defer(fn () => CategoryResource::collection(CategoryActions::getPaginatedCategoriesWithContent($request->get('page', 1))))
+			'categories' => Inertia::defer(fn () => CategoryResource::collection(Category::withCount('articles')->alphabetically()->paginate(20)))
 		]);
 	}
 
@@ -39,18 +38,12 @@ class CategoryController extends Controller
 
 	public function show(Category $category): Response
 	{
-		$category = Cache::flexible(
-			"category-{$category->slug}",
-			[10, 20],
-			function () use ($category) {
-				$category->articles = $category->articles()->with(['author', 'category'])->paginate(20);
-
-				return $category;
-			}
-		);
-
 		return inertia('Categories/Show', [
-			'category' => Inertia::defer(fn () => CategoryResource::make($category))
+			'category' => Inertia::defer(fn () => CategoryResource::make($category)),
+			'articles' => Inertia::defer(
+				fn () => CompactArticleResource::collection($category->articles()->with(['author', 'category'])->paginate(20)),
+				'articles'
+			)
 		]);
 	}
 

@@ -1,12 +1,21 @@
 <template>
-    <div class="flex items-center gap-1">
+    <div class="flex items-center gap-4">
         <template v-if="currentUser">
-            <Link :href="route('security.logout')">logout</Link>
+            <Link
+                :href="route('users.show', { user: currentUser.username })"
+                class="flex gap-1"
+            >
+                <span>{{ currentUser.name }}</span>
+                <span class="font-light text-slate-300"
+                    >(@{{ currentUser.username }})</span
+                >
+            </Link>
+            <Link :href="route('security.logout')">Logout</Link>
         </template>
         <template v-else>
-            <Link :href="route('security.login')">login</Link>
+            <Link :href="route('security.register')">Register</Link>
+            <Link :href="route('security.login')">Login</Link>
         </template>
-        <div class="hidden">Menu</div>
     </div>
 </template>
 

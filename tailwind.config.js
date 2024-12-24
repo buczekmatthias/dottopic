@@ -14,7 +14,7 @@ export default {
                 },
             },
             colors: {
-                link: "#6e54b5",
+                link: "#927bd0",
             },
             borderColor: {
                 input: {

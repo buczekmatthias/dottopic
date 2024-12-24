@@ -6,6 +6,8 @@ use App\Actions\UserActions;
 use App\Enum\UserRole;
 use App\Http\Requests\UpdateUserImageRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Resources\CommentResource;
+use App\Http\Resources\CompactArticleResource;
 use App\Http\Resources\UserEditResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
@@ -36,9 +38,9 @@ class UserController extends Controller
 			'content' => Inertia::defer(function () use ($tab, $user) {
 				return $tab === 'articles'
 				?
-				$user->articles()->with('category')->paginate(30)
+				CompactArticleResource::collection($user->articles()->with('category')->paginate(30))
 				:
-				$user->comments()->with('article')->paginate(50);
+				CommentResource::collection($user->comments()->with('article')->paginate(50));
 			}),
 			'tab' => $tab
 		]);

@@ -7,7 +7,10 @@ body {
 }
 
 #app {
-    @apply flex flex-col min-h-screen leading-7;
+    @apply flex flex-col min-h-screen;
+}
+#app *:not(h1) {
+    @apply !leading-6;
 }
 
 input,

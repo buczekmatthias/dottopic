@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="flex flex-col gap-3">
         <Link
             :href="route('articles.create')"
             v-if="currentUser && currentUser.isStaff"
@@ -11,23 +11,12 @@
                 <p>Loading articles..</p>
             </template>
 
-            <div
+            <Article
                 v-for="article in articles.data"
                 :key="article.slug"
-                class="mb-4"
-            >
-                {{ article }}
-                <br />
-                <Link :href="route('articles.show', { article: article.slug })">
-                    Show article
-                </Link>
-            </div>
-            <br />
-            <br />
-            {{ articles.links }}
-            <br />
-            <br />
-            {{ articles.meta }}
+                :article="article"
+            />
+            <Pagination :links="articles.links" :pagination="articles.meta" />
         </Deferred>
     </div>
 </template>
@@ -38,6 +27,8 @@ import route from "@/Composables/Route";
 import currentUser from "@/Composables/User";
 
 import Button from "@/Components/Form/Button.vue";
+import Article from "@/Components/UI/Article.vue";
+import Pagination from "@/Components/Pagination.vue";
 
 defineProps({
     articles: Object,

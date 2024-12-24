@@ -40,4 +40,9 @@ class Category extends Model
 	{
 		$query->orderBy('name', $reversed ? 'DESC' : 'ASC');
 	}
+
+	public function scopeMostPopular(Builder $query)
+	{
+		$query->withCount('articles')->orderBy('articles_count', 'DESC');
+	}
 }

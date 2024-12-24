@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Actions\TagActions;
 use App\Http\Requests\CreateTagRequest;
 use App\Http\Requests\UpdateTagRequest;
+use App\Http\Resources\CategoryResource;
+use App\Http\Resources\CompactArticleResource;
 use App\Http\Resources\TagResource;
 use App\Models\Category;
 use App\Models\Tag;
@@ -27,7 +29,7 @@ class TagController extends Controller
 		);
 
 		return inertia('Tags/Index', [
-			'tags' => Inertia::defer(fn () => $tags)
+			'tags' => Inertia::defer(fn () => TagResource::collection($tags))
 		]);
 	}
 
@@ -47,19 +49,16 @@ class TagController extends Controller
 
 	public function show(Tag $tag): Response
 	{
-		$t = Cache::flexible(
-			"tag-{$tag->slug}",
-			[10, 20],
-			function () use ($tag) {
-				$tag->articles = $tag->articles()->with(['author', 'category'])->paginate(20, pageName: 'articlesPage');
-				$tag->categories = $tag->categories()->paginate(30, pageName: 'categoriesPage');
-
-				return $tag;
-			}
-		);
-
 		return inertia('Tags/Show', [
-			'tag' => Inertia::defer(fn () => TagResource::make($t))
+			'tag' => Inertia::defer(fn () => TagResource::make($tag)),
+			'articles' => Inertia::defer(
+				fn () => CompactArticleResource::collection($tag->articles()->with(['author', 'category'])->paginate(20, pageName: 'articlesPage')),
+				'articles'
+			),
+			'categories' => Inertia::defer(
+				fn () => CategoryResource::collection($tag->categories()->paginate(30, pageName: 'categoriesPage')),
+				'categories'
+			)
 		]);
 	}
 
