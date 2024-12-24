@@ -2,15 +2,15 @@
     <div class="flex flex-col gap-0.5">
         <label class="flex flex-col gap-1.5">
             <p v-if="label">
-                {{ label }} <span v-if="required" class="text-red-600">*</span>
+                {{ label }} <span v-if="required" class="text-red-500">*</span>
             </p>
             <textarea
                 :disabled="isDisabled"
                 class="p-1.5 rounded-md border border-solid"
                 :class="{
-                    'border-gray-300 focus:border-gray-600':
+                    'border-input-default focus:border-input-focus':
                         !error && !isDisabled,
-                    'border-red-600 text-red-600': error,
+                    'border-red-500 text-red-500': error,
                     'cursor-not-allowed bg-slate-100/80 text-slate-500/75':
                         isDisabled,
                 }"
@@ -22,14 +22,14 @@
         </span>
         <template v-if="error">
             <template v-if="typeof error === String">
-                <span class="text-sm text-red-600">{{ error }}</span>
+                <span class="text-sm text-red-500">{{ error }}</span>
             </template>
             <template v-else>
                 <div class="flex flex-col">
                     <span
                         v-for="(err, i) in error"
                         :key="i"
-                        class="text-sm text-red-600"
+                        class="text-sm text-red-500"
                     >
                         {{ err }}
                     </span>

@@ -1,5 +1,5 @@
 <template>
-    <div class="content">
+    <div>
         <form
             @submit.prevent="createTagForm.post(route('admin.tags.store'))"
             class="flex flex-col gap-3"

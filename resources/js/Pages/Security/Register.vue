@@ -1,12 +1,34 @@
 <template>
-    <div class="bg-white rounded-lg p-3 w-full max-w-2xl">
-        <p class="text-4xl font-bold">Create account</p>
-        <p class="font-light text-slate-500 mt-1">
-            And become part of the community
+    <div
+        class="bg-container shadow-lg rounded-lg p-3.5 w-full max-w-2xl flex flex-col"
+    >
+        <div class="flex justify-between mb-2">
+            <p class="text-4xl font-bold">Register</p>
+            <Link
+                :href="route('homepage')"
+                class="flex items-center gap-1.5 duration-150 border border-solid border-slate-200 rounded-full px-3 text-sm"
+            >
+                <p>Back to app</p>
+                <Icon
+                    icon="octicon:arrow-right-16"
+                    height="16"
+                    width="16"
+                    class="mt-1"
+                />
+            </Link>
+        </div>
+        <p class="font-light text-slate-300">
+            <span>Already a member?</span>
+            <Link
+                :href="route('security.login')"
+                class="text-link font-semibold hover:underline underline-offset-2"
+            >
+                Sign in
+            </Link>
         </p>
         <form
             @submit.prevent="registerForm.post(route('security.register'))"
-            class="my-5 flex flex-col gap-3"
+            class="mt-5 flex flex-col gap-3"
         >
             <Input
                 label="Name"
@@ -40,15 +62,6 @@
                 Join now
             </Button>
         </form>
-        <p>
-            <span>Already a member?</span>
-            <Link
-                :href="route('security.login')"
-                class="text-indigo-700 font-semibold hover:underline underline-offset-2"
-            >
-                Sign in
-            </Link>
-        </p>
     </div>
 </template>
 

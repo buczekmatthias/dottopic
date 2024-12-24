@@ -1,5 +1,5 @@
 <template>
-    <div class="content">
+    <div>
         <form
             @submit.prevent="
                 updateCategoryForm.patch(
@@ -33,7 +33,7 @@
             </Button>
         </form>
         <Button
-            extraClasses="!bg-red-600 enabled:hover:!bg-red-700"
+            extraClasses="!bg-red-500 enabled:hover:!bg-red-700"
             @click="
                 router.delete(
                     route('admin.categories.destroy', {

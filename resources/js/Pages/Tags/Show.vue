@@ -1,5 +1,5 @@
 <template>
-    <div class="content">
+    <div>
         <Deferred data="tag">
             <template #fallback>
                 <p>Loading tag...</p>

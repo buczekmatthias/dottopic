@@ -1,5 +1,5 @@
 <template>
-    <div class="content">
+    <div>
         <Link
             :href="route('articles.create')"
             v-if="currentUser && currentUser.isStaff"

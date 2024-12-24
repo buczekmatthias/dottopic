@@ -1,11 +1,16 @@
 <template>
     <label class="flex gap-2 items-center">
         <div
-            class="h-5 w-5 rounded-md cursor-pointer border border-solid border-indigo-700 flex items-center justify-center"
-            :class="model ? 'bg-indigo-700' : 'bg-indigo-50'"
+            class="h-5 w-5 rounded-md cursor-pointer bg-btn-default border border-solid border-checkbox flex items-center justify-center"
+            :class="{
+                'bg-opacity-10': !model,
+            }"
         >
             <svg
-                class="h-[80%] fill-indigo-300"
+                class="h-[80%] fill-slate-50"
+                :class="{
+                    'opacity-30': !model,
+                }"
                 stroke-width="0"
                 viewBox="0 0 16 16"
                 xmlns="http://www.w3.org/2000/svg"
@@ -24,7 +29,7 @@
             :required="required"
         />
         <p class="cursor-pointer">
-            {{ label }} <span v-if="required" class="text-red-600">*</span>
+            {{ label }} <span v-if="required" class="text-red-500">*</span>
         </p>
     </label>
 </template>
@@ -33,7 +38,6 @@
 defineProps({
     label: String,
     required: { type: Boolean, default: false },
-    accentColor: String,
 });
 
 const model = defineModel();

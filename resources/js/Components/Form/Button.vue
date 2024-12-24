@@ -2,7 +2,7 @@
     <button
         :type="type"
         :disabled="isDisabled || isProcessing"
-        class="enabled:bg-indigo-700 disabled:bg-indigo-800 text-indigo-50 enabled:hover:bg-indigo-600 flex items-center justify-center gap-3 rounded-md p-3 enabled:cursor-pointer disabled:cursor-not-allowed"
+        class="enabled:bg-btn-default disabled:bg-btn-disabled duration-150 text-indigo-50 enabled:hover:bg-btn-hover flex items-center justify-center gap-3 rounded-md p-3 enabled:cursor-pointer disabled:cursor-not-allowed"
         :class="extraClasses"
     >
         <template v-if="isProcessing">

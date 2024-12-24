@@ -1,5 +1,5 @@
 <template>
-    <div class="content">
+    <div>
         <template v-if="currentUser">
             <Link
                 :href="route('users.edit', { user: user.username })"

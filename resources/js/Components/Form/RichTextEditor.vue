@@ -94,14 +94,14 @@
         <EditorContent :editor="editor" v-model="model" />
         <template v-if="error">
             <template v-if="typeof error === String">
-                <span class="text-sm text-red-600">{{ error }}</span>
+                <span class="text-sm text-red-500">{{ error }}</span>
             </template>
             <template v-else>
                 <div class="flex flex-col">
                     <span
                         v-for="(err, i) in error"
                         :key="i"
-                        class="text-sm text-red-600"
+                        class="text-sm text-red-500"
                     >
                         {{ err }}
                     </span>

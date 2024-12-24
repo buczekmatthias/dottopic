@@ -1,5 +1,5 @@
 <template>
-    <div class="content flex flex-col gap-4">
+    <div class="flex flex-col gap-4">
         <div class="flex gap-2">
             <Link :href="route('users.index')">All</Link>
             <Link

@@ -1,5 +1,5 @@
 <template>
-    <div class="content">
+    <div>
         {{ user }}
         <form
             @submit.prevent="

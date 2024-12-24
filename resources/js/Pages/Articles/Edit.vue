@@ -1,5 +1,5 @@
 <template>
-    <div class="content">
+    <div>
         {{ articleEditForm.errors }}
         <form
             @submit.prevent="

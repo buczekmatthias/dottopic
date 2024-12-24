@@ -1,5 +1,5 @@
 <template>
-    <div class="content flex flex-col gap-4">
+    <div class="flex flex-col gap-4">
         <Link
             :href="route('admin.categories.create')"
             v-if="currentUser && currentUser.isStaff"

@@ -1,5 +1,5 @@
 <template>
-    <div class="content">
+    <div>
         <form @submit.prevent="handleFormSubmit">
             <Input
                 label="Title"

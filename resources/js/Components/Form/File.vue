@@ -4,7 +4,7 @@
             <slot>
                 <p v-if="label">
                     {{ label }}
-                    <span v-if="required" class="text-red-600">*</span>
+                    <span v-if="required" class="text-red-500">*</span>
                 </p>
             </slot>
             <input
@@ -17,7 +17,7 @@
                     hidden: $slots.default,
                     'border-gray-300 focus:border-gray-600':
                         !error && !isDisabled,
-                    'border-red-600 text-red-600': error,
+                    'border-red-500 text-red-500': error,
                     'cursor-not-allowed bg-slate-100/80 text-slate-500/75':
                         isDisabled,
                 }"
@@ -29,14 +29,14 @@
         </span>
         <template v-if="error">
             <template v-if="typeof error === String">
-                <span class="text-sm text-red-600">{{ error }}</span>
+                <span class="text-sm text-red-500">{{ error }}</span>
             </template>
             <template v-else>
                 <div class="flex flex-col">
                     <span
                         v-for="(err, i) in error"
                         :key="i"
-                        class="text-sm text-red-600"
+                        class="text-sm text-red-500"
                     >
                         {{ err }}
                     </span>

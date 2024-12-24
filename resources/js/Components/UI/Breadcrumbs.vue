@@ -1,6 +1,6 @@
 <template>
     <Head :title="`${crumbs[0]} | dotTopic`" />
-    <div class="content">
+    <div class="font-light">
         <p v-html="getBreadCrumbs()"></p>
     </div>
 </template>
@@ -13,7 +13,8 @@ const crumbs = computed(() => usePage().props.breadcrumbs[0]);
 
 const getBreadCrumbs = () => {
     let str = "";
-    const separator = "<span class='text-slate-300/80 font-semibold'>❯</span>";
+    const separator =
+        "<span class='text-slate-300/80 font-semibold text-sm'>❯</span>";
 
     crumbs.value.forEach((c, i) => {
         str += c;
