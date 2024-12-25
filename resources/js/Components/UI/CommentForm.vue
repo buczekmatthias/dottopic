@@ -5,6 +5,8 @@
                 onSuccess: () => newCommentForm.reset(),
             })
         "
+        class="flex flex-col gap-2"
+        v-if="author"
     >
         <Textarea
             :error="newCommentForm.errors.content"
@@ -13,10 +15,12 @@
         <Button
             :isProcessing="newCommentForm.processing"
             processingText="Posting"
+            class="md:self-end"
         >
             Post comment
         </Button>
     </form>
+    <p v-else>You must login to post comments</p>
 </template>
 
 <script setup>

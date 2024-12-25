@@ -2,23 +2,21 @@
     <div
         class="grid grid-cols-1 lg:grid-cols-[1fr_4fr] gap-2 odd:border-y border-solid border-y-input-default py-6"
     >
-        <p>{{ article.created_at }}</p>
-        <div class="flex flex-col items-start gap-2">
-            <h1 class="text-2xl font-bold">{{ article.title }}</h1>
-            <p>
-                Posted in
-                <Link
-                    :href="
-                        route('categories.show', {
-                            category: article.category.slug,
-                        })
-                    "
-                    class="text-link capitalize"
-                >
-                    {{ article.category.name }}
-                </Link>
-                <template v-if="article.author">
-                    by
+        <div class="flex flex-col items-start">
+            <Link
+                :href="
+                    route('categories.show', {
+                        category: article.category.slug,
+                    })
+                "
+                class="text-link capitalize"
+            >
+                {{ article.category.name }}
+            </Link>
+            <p>{{ article.created_at }}</p>
+            <template v-if="article.author">
+                <p class="mt-auto">
+                    By
                     <Link
                         :href="
                             route('users.show', {
@@ -29,8 +27,11 @@
                     >
                         {{ article.author.name }}
                     </Link>
-                </template>
-            </p>
+                </p>
+            </template>
+        </div>
+        <div class="flex flex-col items-start gap-2">
+            <h1 class="text-2xl font-bold">{{ article.title }}</h1>
             <p class="font-light text-sm" v-html="article.description"></p>
             <Link
                 :href="route('articles.show', { article: article.slug })"

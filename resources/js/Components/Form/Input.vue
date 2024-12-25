@@ -18,7 +18,7 @@
                 v-model="model"
             />
         </label>
-        <span v-if="helpText" class="text-sm text-slate-500">
+        <span v-if="helpText" class="text-sm text-slate-400">
             {{ helpText }}
         </span>
         <template v-if="error">

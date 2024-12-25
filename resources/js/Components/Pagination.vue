@@ -2,6 +2,7 @@
     <div
         class="flex justify-between items-center"
         v-if="
+            pagination.total > 0 &&
             pagination.current_page > 0 &&
             pagination.current_page <= pagination.last_page
         "

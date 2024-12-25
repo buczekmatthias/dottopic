@@ -69,6 +69,8 @@
 import { Link, useForm } from "@inertiajs/vue3";
 import route from "@/Composables/Route";
 
+import { Icon } from "@iconify/vue";
+
 import Input from "@/Components/Form/Input.vue";
 import Button from "@/Components/Form/Button.vue";
 

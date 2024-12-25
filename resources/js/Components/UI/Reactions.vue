@@ -1,5 +1,21 @@
 <template>
-    <div>
+    <div
+        class="flex justify-between items-center gap-2"
+        :class="
+            type === 'comment'
+                ? 'flex-col max-md:!items-start md:flex-row'
+                : 'my-4'
+        "
+    >
+        <div class="flex gap-1" v-if="reactions.count > 0">
+            <div class="">
+                <p v-for="r in reactions.display" :key="r">{{ r }}</p>
+            </div>
+            <p>
+                {{ reactions.count }}
+            </p>
+        </div>
+        <p v-else>No reactions</p>
         <template v-if="currentUser">
             <Link
                 :href="route('reactions.destroy', { reaction: identifier })"
@@ -9,7 +25,7 @@
             >
                 {{ userReaction }} {{ availableReactions[userReaction] }}
             </Link>
-            <div v-else>
+            <div class="flex gap-2" v-else>
                 <Link
                     :href="route('reactions.store')"
                     method="POST"
@@ -20,6 +36,7 @@
                     }"
                     v-for="reaction in Object.keys(availableReactions)"
                     :key="reaction"
+                    class="text-xl hover:scale-[1.35] duration-150"
                 >
                     {{ reaction }}
                 </Link>

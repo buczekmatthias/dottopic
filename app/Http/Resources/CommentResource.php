@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Actions\ArticleActions;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\MissingValue;
@@ -18,7 +19,6 @@ class CommentResource extends JsonResource
 		$data = [
 			'slug' => $this->slug,
 			'content' => $this->content,
-			'reactions' => $this->whenLoaded('reactions'),
 			'created_at' => $this->created_at->format('F jS, Y')
 		];
 
@@ -28,6 +28,14 @@ class CommentResource extends JsonResource
 
 		if (!($this->whenLoaded('article') instanceof MissingValue)) {
 			$data['article'] = $this->article->slug;
+		}
+
+		if (!($this->whenLoaded('reactions') instanceof MissingValue)) {
+			$data['reactions_count'] = ArticleActions::prepareReactionsArray($this->reactions);
+
+			if ($request->user()) {
+				$data['userReaction'] = $this->reactions->firstWhere('user_id', $request->user()->id)?->content;
+			}
 		}
 
 		return $data;

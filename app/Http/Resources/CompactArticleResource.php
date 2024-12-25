@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Actions\ArticleActions;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\MissingValue;
@@ -20,7 +21,6 @@ class CompactArticleResource extends JsonResource
 			'slug' => $this->slug,
 			'description' => $this->description,
 			'created_at' => $this->created_at->format('F j, Y'),
-			'reactions_count' => $this->whenCounted('reactions'),
 			'comments_count' => $this->whenCounted('comments')
 		];
 
@@ -30,6 +30,10 @@ class CompactArticleResource extends JsonResource
 
 		if (!($this->whenLoaded('category') instanceof MissingValue)) {
 			$data['category'] = ['name' => $this->category->name, 'slug' => $this->category->slug];
+		}
+
+		if (!($this->whenLoaded('reactions') instanceof MissingValue)) {
+			$data['reactions_count'] = ArticleActions::prepareReactionsArray($this->reactions);
 		}
 
 		return $data;

@@ -3,12 +3,12 @@
         <template v-if="currentUser">
             <Link
                 :href="route('users.show', { user: currentUser.username })"
-                class="flex gap-1"
+                class="flex gap-1 text-link"
             >
                 <span>{{ currentUser.name }}</span>
-                <span class="font-light text-slate-300"
-                    >(@{{ currentUser.username }})</span
-                >
+                <span class="font-light text-slate-300">
+                    (@{{ currentUser.username }})
+                </span>
             </Link>
             <Link :href="route('security.logout')">Logout</Link>
         </template>

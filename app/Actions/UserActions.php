@@ -7,7 +7,6 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -28,15 +27,7 @@ final class UserActions
 
 		$type = $type === '' ? 'all' : $type;
 
-		$users = Cache::flexible(
-			"users-{$type}-{$page}",
-			[10, 30],
-			function () use ($users) {
-				return UserResource::collection($users->paginate(50));
-			}
-		);
-
-		return $users;
+		return UserResource::collection($users->paginate(50));
 	}
 
 	public static function updateProfilePicture(UploadedFile $file, User $user): void

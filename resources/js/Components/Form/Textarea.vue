@@ -6,7 +6,7 @@
             </p>
             <textarea
                 :disabled="isDisabled"
-                class="p-1.5 rounded-md border border-solid"
+                class="p-1.5 rounded-md border border-solid resize-y min-h-12 h-24 max-h-48"
                 :class="{
                     'border-input-default focus:border-input-focus':
                         !error && !isDisabled,
@@ -17,7 +17,7 @@
                 v-model="model"
             ></textarea>
         </label>
-        <span v-if="helpText" class="text-sm text-slate-500">
+        <span v-if="helpText" class="text-sm text-slate-400">
             {{ helpText }}
         </span>
         <template v-if="error">

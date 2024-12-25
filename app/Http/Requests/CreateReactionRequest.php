@@ -27,7 +27,7 @@ class CreateReactionRequest extends FormRequest
 		return [
 			'model' => ['string', 'required', 'in:article,comment'],
 			'reaction' => ['string', 'required', Rule::in(array_keys(Reactions::getAvailableReactions()))],
-			'slug' => ['string', 'required', 'exists:articles,slug']
+			'slug' => ['string', 'required', "exists:{$this->model}s,slug"]
 		];
 	}
 }

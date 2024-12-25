@@ -5,8 +5,6 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\MissingValue;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 
 class ArticleResource extends JsonResource
@@ -32,22 +30,15 @@ class ArticleResource extends JsonResource
 
 		$data = [
 			...CompactArticleResource::make($this)->toArray($request),
-			'content' => $content,
+			'content' => $content->toArray(),
 		];
 
 		if (!($this->whenLoaded('tags') instanceof MissingValue)) {
 			$data['tags'] = collect($this->tags)->map(fn ($t) => ['name' => $t->name, 'slug' => $t->slug]);
 		}
 
-		if ($this->comments instanceof LengthAwarePaginator) {
-			$data['comments'] = [
-				'data' => CommentResource::collection($this->comments->items()),
-				'pagination' => Arr::except($this->comments->toArray(), 'data')
-			];
-
-			if ($request->user()) {
-				$data['userReaction'] = $this->reactions->firstWhere('user_id', $request->user()->id)?->content;
-			}
+		if ($request->user()) {
+			$data['userReaction'] = $this->reactions->firstWhere('user_id', $request->user()->id)?->content;
 		}
 
 		return $data;

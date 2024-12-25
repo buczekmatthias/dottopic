@@ -11,25 +11,15 @@ use App\Http\Resources\TagResource;
 use App\Models\Category;
 use App\Models\Tag;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class TagController extends Controller
 {
-	public function index(Request $request): Response
+	public function index(): Response
 	{
-		$page = $request->get('page', 1);
-
-		$tags = Cache::flexible(
-			"tags-{$page}",
-			[15, 30],
-			fn () => Tag::select(['name', 'slug'])->withCount(['articles', 'categories'])->alphabetically()->paginate(100)
-		);
-
 		return inertia('Tags/Index', [
-			'tags' => Inertia::defer(fn () => TagResource::collection($tags))
+			'tags' => Inertia::defer(fn () => TagResource::collection(Tag::select(['name', 'slug'])->withCount(['articles', 'categories'])->alphabetically()->paginate(100)))
 		]);
 	}
 

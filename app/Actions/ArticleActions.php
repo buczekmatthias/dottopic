@@ -8,8 +8,8 @@ use App\Models\Tag;
 use App\Services\Reactions;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -61,39 +61,23 @@ final class ArticleActions
 		});
 	}
 
-	public static function getArticleShowData(Article $article): array
+	public static function prepareReactionsArray(Collection $reactions): array
 	{
 		$availableReactions = Reactions::getAvailableReactions();
 
-		$a = Cache::flexible(
-			"article-{$article->slug}",
-			[5, 10],
-			function () use ($article, $availableReactions) {
-				$article->load(['author', 'reactions', 'category', 'tags']);
-				$article->comments = $article->comments()->with('author')->paginate(50, pageName:'comments');
+		$rc = [];
 
-				$rc = [];
+		foreach ($availableReactions as $r => $c) {
+			$count = $reactions->where('content', $r)->count();
 
-				foreach ($availableReactions as $r => $c) {
-					$count = $article->reactions->where('content', $r)->count();
-
-					if ($count > 0) {
-						$rc[$r] = $count;
-					}
-				}
-
-				$article->reactions_count = [
-					'display' => array_keys(collect($rc)->sort(fn ($a, $b) => $b <=> $a)->slice(0, 3)->toArray()),
-					'count' => array_sum($rc)
-				];
-
-				return $article;
+			if ($count > 0) {
+				$rc[$r] = $count;
 			}
-		);
+		}
 
 		return [
-			'article' => $a,
-			'availableReactions' => $availableReactions
+			'display' => array_keys(collect($rc)->sort(fn ($a, $b) => $b <=> $a)->slice(0, 3)->toArray()),
+			'count' => array_sum($rc)
 		];
 	}
 
