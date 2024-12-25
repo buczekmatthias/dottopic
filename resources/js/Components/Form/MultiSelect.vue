@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col gap-0.5">
+    <div class="grid grid-cols-1 gap-2 max-w-full">
         <label class="flex flex-col gap-1.5 relative" ref="select">
             <p v-if="label">
                 {{ label }} <span v-if="required" class="text-red-500">*</span>
@@ -19,9 +19,14 @@
                 v-model="search"
             />
             <div
-                class="flex-col absolute top-[105%] left-0 w-full z-30 bg-white"
+                class="flex-col absolute top-[110%] left-0 w-full z-30 bg-container border border-solid border-input-default rounded-md shadow-lg overflow-auto max-h-72"
                 :class="showSuggestions ? 'flex' : 'hidden'"
             >
+                <p
+                    class="p-2 text-lg font-semibold border-b border-solid border-b-input-default sticky top-0 bg-container"
+                >
+                    Choices
+                </p>
                 <div
                     @click="addNewEntry(entry.slug)"
                     v-for="entry in searchResults"
@@ -32,13 +37,26 @@
                     <p class="text-slate-400">{{ entry.slug }}</p>
                 </div>
             </div>
-            <div class="" v-if="model.length > 0">
-                <div class="" v-for="slug in model" :key="slug">
-                    <p>{{ slug }}</p>
-                    <p @click="removeEntry(slug)">Remove</p>
-                </div>
-            </div>
         </label>
+        <div
+            class="flex gap-1 max-w-full overflow-auto"
+            v-if="model.length > 0"
+        >
+            <div
+                class="flex items-center gap-2 bg-theme/30 rounded-md p-1.5"
+                v-for="slug in model"
+                :key="slug"
+            >
+                <p>{{ slug }}</p>
+                <Icon
+                    class="cursor-pointer"
+                    icon="octicon:trash-16"
+                    height="16"
+                    width="16"
+                    @click="removeEntry(slug)"
+                />
+            </div>
+        </div>
         <span v-if="helpText" class="text-sm text-slate-400">
             {{ helpText }}
         </span>
@@ -64,6 +82,7 @@
 <script setup>
 import { computed, ref } from "vue";
 import { onClickOutside } from "@vueuse/core";
+import { Icon } from "@iconify/vue";
 
 const props = defineProps({
     label: String,
@@ -86,16 +105,19 @@ const searchResults = computed(() => {
     if (search.value) {
         return props.content.filter(
             (d) =>
-                d.name.toLowerCase().includes(search.value.toLowerCase()) ||
-                d.slug.toLowerCase().includes(search.value.toLowerCase())
+                (d.name.toLowerCase().includes(search.value.toLowerCase()) ||
+                    d.slug
+                        .toLowerCase()
+                        .includes(search.value.toLowerCase())) &&
+                !model.value.includes(d.slug)
         );
     }
 });
 
 const addNewEntry = (slug) => {
-    model.value.push(slug);
     showSuggestions.value = false;
     search.value = "";
+    model.value.push(slug);
 };
 
 const removeEntry = (slug) =>

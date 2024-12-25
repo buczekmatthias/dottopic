@@ -43,10 +43,27 @@
                 </div>
             </template>
         </template>
+        <div class="flex flex-wrap" v-if="previews.length > 0">
+            <template v-for="item in previews" :key="item.url">
+                <img
+                    :src="item.url"
+                    alt=""
+                    v-if="item.isImage"
+                    class="h-24 w-24 rounded-md object-contain"
+                />
+                <video
+                    :src="item.url"
+                    v-else
+                    class="h-24 w-24 rounded-md"
+                ></video>
+            </template>
+        </div>
     </div>
 </template>
 
 <script setup>
+import { ref } from "vue";
+
 defineProps({
     label: String,
     required: { type: Boolean, default: true },
@@ -57,7 +74,23 @@ defineProps({
     multiple: { type: Boolean, default: false },
 });
 
+const previews = ref([]);
+
 const emit = defineEmits(["changeFile"]);
 
-const handleInputChange = (e) => emit("changeFile", e.target.files);
+const handleInputChange = (e) => {
+    emit("changeFile", e.target.files);
+    filesPreviewUrls(e.target.files);
+};
+
+const filesPreviewUrls = (files) => {
+    previews.value = [];
+
+    Array.from(files).forEach((f) =>
+        previews.value.push({
+            url: URL.createObjectURL(f),
+            isImage: f.type.includes("image"),
+        })
+    );
+};
 </script>

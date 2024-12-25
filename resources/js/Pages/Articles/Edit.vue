@@ -1,12 +1,12 @@
 <template>
     <div>
-        {{ articleEditForm.errors }}
         <form
             @submit.prevent="
                 articleEditForm.post(
                     route('articles.update', { article: article.slug })
                 )
             "
+            class="flex flex-col gap-3"
         >
             <Input
                 label="Title"
@@ -24,6 +24,7 @@
                 label="Description"
                 :error="articleEditForm.errors.description"
                 v-model="articleEditForm.description"
+                :characterLimit="100"
             />
             <MultiSelect
                 label="Tags"
@@ -31,115 +32,41 @@
                 :error="articleEditForm.errors.tags"
                 v-model="articleEditForm.tags"
             />
-            <div>
+            <div class="flex flex-col gap-3">
+                <p class="">Content <span class="text-red-500">*</span></p>
                 <template
                     v-for="(content, i) in articleEditForm.content"
                     :key="content.id"
                 >
-                    {{ content }}
-                    <template v-if="content.type === 'header'">
-                        <div>
-                            <Button
-                                type="button"
-                                @click="swap(i, i - 1)"
-                                :disabled="i === 0"
-                            >
-                                <Icon
-                                    icon="octicon:chevron-up-12"
-                                    width="12"
-                                    height="12"
-                                />
-                            </Button>
-                            <Button
-                                type="button"
-                                @click="swap(i, i + 1)"
-                                :disabled="
-                                    i === articleEditForm.content.length - 1
-                                "
-                            >
-                                <Icon
-                                    icon="octicon:chevron-down-12"
-                                    width="12"
-                                    height="12"
-                                />
-                            </Button>
+                    <ContentElement
+                        :type="content.type"
+                        :contentLength="articleEditForm.content.length"
+                        :index="i"
+                        @moveUp="swap(i, i - 1)"
+                        @moveDown="swap(i, i + 1)"
+                        @removeElement="
+                            content.type === 'file'
+                                ? toggleFileRemove(content.id)
+                                : removeContentElement(content.id)
+                        "
+                    >
+                        <template v-if="content.type === 'header'">
                             <Input
                                 :error="
                                     articleEditForm.errors.content?.[i].content
                                 "
                                 v-model="content.content"
                             />
-                            <p @click="removeContentElement(content.id)">
-                                Remove
-                            </p>
-                        </div>
-                    </template>
-                    <template v-else-if="content.type === 'text'">
-                        <div>
-                            <Button
-                                type="button"
-                                @click="swap(i, i - 1)"
-                                :disabled="i === 0"
-                            >
-                                <Icon
-                                    icon="octicon:chevron-up-12"
-                                    width="12"
-                                    height="12"
-                                />
-                            </Button>
-                            <Button
-                                type="button"
-                                @click="swap(i, i + 1)"
-                                :disabled="
-                                    i === articleEditForm.content.length - 1
-                                "
-                            >
-                                <Icon
-                                    icon="octicon:chevron-down-12"
-                                    width="12"
-                                    height="12"
-                                />
-                            </Button>
+                        </template>
+                        <template v-else-if="content.type === 'text'">
                             <RichTextEditor
                                 :error="
                                     articleEditForm.errors.content?.[i].content
                                 "
                                 v-model="content.content"
                             />
-                            <p @click="removeContentElement(content.id)">
-                                Remove
-                            </p>
-                        </div>
-                    </template>
-                    <template v-else>
-                        <div>
-                            <Button
-                                type="button"
-                                @click="swap(i, i - 1)"
-                                :disabled="i === 0"
-                            >
-                                <Icon
-                                    icon="octicon:chevron-up-12"
-                                    width="12"
-                                    height="12"
-                                />
-                            </Button>
-                            <Button
-                                type="button"
-                                @click="swap(i, i + 1)"
-                                :disabled="
-                                    i === articleEditForm.content.length - 1
-                                "
-                            >
-                                <Icon
-                                    icon="octicon:chevron-down-12"
-                                    width="12"
-                                    height="12"
-                                />
-                            </Button>
-                            <!-- TODO: Add displaying image instead of file input in Vue form -->
-                            {{ content.content }}
-                            {{ typeof content.content }}
+                        </template>
+                        <template v-else>
                             <template
                                 v-if="typeof content.content === 'string'"
                             >
@@ -164,9 +91,6 @@
                                             ),
                                     }"
                                 ></video>
-                                <p @click="toggleFileRemove(content.id)">
-                                    Remove file
-                                </p>
                             </template>
                             <template v-else>
                                 <File
@@ -177,12 +101,9 @@
                                     "
                                     @changeFile="content.content = $event[0]"
                                 />
-                                <p @click="removeContentElement(content.id)">
-                                    Remove
-                                </p>
                             </template>
-                        </div>
-                    </template>
+                        </template>
+                    </ContentElement>
                 </template>
             </div>
             <ArticleContentTypePicker @typePicked="handleNewPick" />
@@ -210,6 +131,7 @@ import File from "@/Components/Form/File.vue";
 import Select from "@/Components/Form/Select.vue";
 import MultiSelect from "@/Components/Form/MultiSelect.vue";
 import Button from "@/Components/Form/Button.vue";
+import ContentElement from "@/Components/Form/ContentElement.vue";
 
 const props = defineProps({
     article: Object,

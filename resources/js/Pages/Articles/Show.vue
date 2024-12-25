@@ -5,12 +5,24 @@
                 <p>Loading article...</p>
             </template>
 
-            <Link
-                :href="route('articles.edit', { article: article.slug })"
-                v-if="currentUser && currentUser.isStaff"
+            <div
+                class="flex gap-2"
+                v-if="
+                    currentUser &&
+                    (currentUser.isStaff ||
+                        currentUser.username === article.author.username)
+                "
             >
-                <Button>Edit article</Button>
-            </Link>
+                <Link :href="route('articles.edit', { article: article.slug })">
+                    <Button>Edit article</Button>
+                </Link>
+                <Link
+                    method="DELETE"
+                    :href="route('articles.destroy', { article: article.slug })"
+                >
+                    <Button extraClasses="!bg-rose-600">Delete article</Button>
+                </Link>
+            </div>
             <div class="flex flex-col gap-3">
                 <div class="flex flex-col gap-4">
                     <h1 class="font-bold text-2xl">{{ article.title }}</h1>

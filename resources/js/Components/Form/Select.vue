@@ -22,13 +22,18 @@
                 />
             </label>
             <div
-                class="flex-col absolute top-[105%] left-0 w-full z-30 bg-white"
+                class="flex-col absolute top-[110%] left-0 w-full z-30 bg-container border border-solid border-input-default rounded-md shadow-lg overflow-auto max-h-72"
                 :class="showSuggestions ? 'flex' : 'hidden'"
             >
+                <p
+                    class="p-2 text-lg font-semibold border-b border-solid border-b-input-default sticky top-0 bg-container"
+                >
+                    Choices
+                </p>
                 <div
                     @click="
-                        model = entry.slug;
                         showSuggestions = false;
+                        model = entry.slug;
                     "
                     v-for="entry in searchResults"
                     :key="entry"

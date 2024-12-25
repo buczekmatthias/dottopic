@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form @submit.prevent="handleFormSubmit">
+        <form @submit.prevent="handleFormSubmit" class="flex flex-col gap-3">
             <Input
                 label="Title"
                 :error="articleCreateForm.errors.title"
@@ -24,37 +24,21 @@
                 :error="articleCreateForm.errors.tags"
                 v-model="articleCreateForm.tags"
             />
-            <div>
+            <div class="flex flex-col gap-3">
+                <p class="">Content <span class="text-red-500">*</span></p>
                 <template
                     v-for="(content, i) in articleCreateForm.content"
                     :key="content.id"
                 >
-                    <template v-if="content.type === 'header'">
-                        <div>
-                            <Button
-                                type="button"
-                                @click="swap(i, i - 1)"
-                                :disabled="i === 0"
-                            >
-                                <Icon
-                                    icon="octicon:chevron-up-12"
-                                    width="12"
-                                    height="12"
-                                />
-                            </Button>
-                            <Button
-                                type="button"
-                                @click="swap(i, i + 1)"
-                                :disabled="
-                                    i === articleCreateForm.content.length - 1
-                                "
-                            >
-                                <Icon
-                                    icon="octicon:chevron-down-12"
-                                    width="12"
-                                    height="12"
-                                />
-                            </Button>
+                    <ContentElement
+                        :type="content.type"
+                        :contentLength="articleCreateForm.content.length"
+                        :index="i"
+                        @moveUp="swap(i, i - 1)"
+                        @moveDown="swap(i, i + 1)"
+                        @removeElement="removeContentElement(content.id)"
+                    >
+                        <template v-if="content.type === 'header'">
                             <Input
                                 :error="
                                     articleCreateForm.errors.content?.[i]
@@ -62,37 +46,8 @@
                                 "
                                 v-model="content.content"
                             />
-                            <p @click="removeContentElement(content.id)">
-                                Remove
-                            </p>
-                        </div>
-                    </template>
-                    <template v-else-if="content.type === 'text'">
-                        <div>
-                            <Button
-                                type="button"
-                                @click="swap(i, i - 1)"
-                                :disabled="i === 0"
-                            >
-                                <Icon
-                                    icon="octicon:chevron-up-12"
-                                    width="12"
-                                    height="12"
-                                />
-                            </Button>
-                            <Button
-                                type="button"
-                                @click="swap(i, i + 1)"
-                                :disabled="
-                                    i === articleCreateForm.content.length - 1
-                                "
-                            >
-                                <Icon
-                                    icon="octicon:chevron-down-12"
-                                    width="12"
-                                    height="12"
-                                />
-                            </Button>
+                        </template>
+                        <template v-else-if="content.type === 'text'">
                             <RichTextEditor
                                 :error="
                                     articleCreateForm.errors.content?.[i]
@@ -100,37 +55,8 @@
                                 "
                                 v-model="content.content"
                             />
-                            <p @click="removeContentElement(content.id)">
-                                Remove
-                            </p>
-                        </div>
-                    </template>
-                    <template v-else>
-                        <div>
-                            <Button
-                                type="button"
-                                @click="swap(i, i - 1)"
-                                :disabled="i === 0"
-                            >
-                                <Icon
-                                    icon="octicon:chevron-up-12"
-                                    width="12"
-                                    height="12"
-                                />
-                            </Button>
-                            <Button
-                                type="button"
-                                @click="swap(i, i + 1)"
-                                :disabled="
-                                    i === articleCreateForm.content.length - 1
-                                "
-                            >
-                                <Icon
-                                    icon="octicon:chevron-down-12"
-                                    width="12"
-                                    height="12"
-                                />
-                            </Button>
+                        </template>
+                        <template v-else>
                             <File
                                 :mimes="mimes"
                                 :error="
@@ -139,11 +65,8 @@
                                 "
                                 @changeFile="content.content = $event[0]"
                             />
-                            <p @click="removeContentElement(content.id)">
-                                Remove
-                            </p>
-                        </div>
-                    </template>
+                        </template>
+                    </ContentElement>
                 </template>
             </div>
             <ArticleContentTypePicker @typePicked="handleNewPick" />
@@ -172,6 +95,7 @@ import File from "@/Components/Form/File.vue";
 import Select from "@/Components/Form/Select.vue";
 import MultiSelect from "@/Components/Form/MultiSelect.vue";
 import Button from "@/Components/Form/Button.vue";
+import ContentElement from "@/Components/Form/ContentElement.vue";
 
 defineProps({
     categories: Object,

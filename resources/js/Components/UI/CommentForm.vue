@@ -15,7 +15,7 @@
         <Button
             :isProcessing="newCommentForm.processing"
             processingText="Posting"
-            class="md:self-end"
+            extraClasses="md:self-end"
         >
             Post comment
         </Button>
