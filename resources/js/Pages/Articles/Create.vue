@@ -17,6 +17,7 @@
                 label="Description"
                 :error="articleCreateForm.errors.description"
                 v-model="articleCreateForm.description"
+                :characterLimit="100"
             />
             <MultiSelect
                 label="Tags"
@@ -70,7 +71,6 @@
                 </template>
             </div>
             <ArticleContentTypePicker @typePicked="handleNewPick" />
-            <!-- TODO: Disable all buttons in forms until form is valid -->
             <Button
                 :isProcessing="articleCreateForm.processing"
                 processingText="Creating"
@@ -85,8 +85,6 @@
 import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import route from "@/Composables/Route";
-
-import { Icon } from "@iconify/vue";
 
 import ArticleContentTypePicker from "@/Components/Form/ArticleContentTypePicker.vue";
 import Input from "@/Components/Form/Input.vue";

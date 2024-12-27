@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="flex flex-col gap-3">
         <form
             @submit.prevent="
                 updateTagForm.patch(
@@ -13,15 +13,12 @@
                 :error="updateTagForm.errors.name"
                 v-model="updateTagForm.name"
             />
-            <div class="flex flex-wrap gap-3.5">
-                <Checkbox
-                    :label="category.name"
-                    v-for="category in categories"
-                    :key="category.name"
-                    :value="updateTagForm.categories.includes(category.name)"
-                    @change="handleCheckboxChange(category.name)"
-                />
-            </div>
+            <MultiSelect
+                label="Categories"
+                :error="updateTagForm.errors.categories"
+                v-model="updateTagForm.categories"
+                :content="categories"
+            />
             <Button
                 :isProcessing="updateTagForm.processing"
                 processingText="Updating"
@@ -29,47 +26,32 @@
                 Update tag
             </Button>
         </form>
-        <Button
-            extraClasses="!bg-red-500 enabled:hover:!bg-red-700"
-            @click="
-                router.delete(route('admin.tags.destroy', { tag: tag.slug }))
-            "
+        <Link
+            :href="route('admin.tags.destroy', { tag: tag.slug })"
+            method="DELETE"
         >
-            Delete
-        </Button>
-        {{ updateTagForm }}
+            <Button extraClasses="!bg-red-500 enabled:hover:!bg-red-700 w-full">
+                Delete tag
+            </Button>
+        </Link>
     </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { router, useForm } from "@inertiajs/vue3";
+import { useForm, Link } from "@inertiajs/vue3";
 import route from "@/Composables/Route";
 
 import Input from "@/Components/Form/Input.vue";
-import Checkbox from "@/Components/Form/Checkbox.vue";
+import MultiSelect from "@/Components/Form/MultiSelect.vue";
 import Button from "@/Components/Form/Button.vue";
 
 const props = defineProps({
     tag: Object,
     categories: Object,
 });
-// TODO: Fix all checkboxes triggering while nothing is added to array and can't remove
-
-// const formCategories = ref(props.tag.categories);
 
 const updateTagForm = useForm({
     name: props.tag.name,
     categories: props.tag.categories,
 });
-
-const handleCheckboxChange = (name) => {
-    if (updateTagForm.categories.includes(name)) {
-        updateTagForm.categories = updateTagForm.categories.filter(
-            (category) => category !== name
-        );
-    } else {
-        updateTagForm.categories.push(name);
-    }
-};
 </script>

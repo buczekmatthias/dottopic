@@ -19,12 +19,13 @@ class UserResource extends JsonResource
 		return [
 			'name' => $this->name,
 			'username' => $this->username,
-			'image' => asset(Storage::url("pfp/{$this->image}")),
+			'image' => $this->image ? asset(Storage::url("pfp/{$this->image}")) : null,
 			'initials' => $this->initials,
 			'bio' => $this->bio,
 			'role' => Str::ucfirst($this->role->value),
 			'articles_count' => $this->whenCounted('articles'),
 			'comments_count' => $this->whenCounted('comments'),
+			'created_at' => $this->created_at->format('F j, Y'),
 		];
 	}
 }

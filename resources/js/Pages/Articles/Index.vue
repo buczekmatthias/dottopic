@@ -2,6 +2,7 @@
     <div class="flex flex-col gap-3">
         <Link
             :href="route('articles.create')"
+            class="self-start"
             v-if="currentUser && currentUser.isStaff"
         >
             <Button>Create new article</Button>

@@ -9,15 +9,12 @@
                 :error="createTagForm.errors.name"
                 v-model="createTagForm.name"
             />
-            <div class="flex flex-wrap gap-3.5">
-                <Checkbox
-                    :label="category.name"
-                    v-for="category in categories"
-                    :key="category.name"
-                    :value="createTagForm.categories.includes(category.name)"
-                    @change="handleCheckboxChange(category.name)"
-                />
-            </div>
+            <MultiSelect
+                label="Categories"
+                :error="createTagForm.errors.categories"
+                v-model="createTagForm.categories"
+                :content="categories"
+            />
             <Button
                 :isProcessing="createTagForm.processing"
                 processingText="Creating"
@@ -33,7 +30,7 @@ import { useForm } from "@inertiajs/vue3";
 import route from "@/Composables/Route";
 
 import Input from "@/Components/Form/Input.vue";
-import Checkbox from "@/Components/Form/Checkbox.vue";
+import MultiSelect from "@/Components/Form/MultiSelect.vue";
 import Button from "@/Components/Form/Button.vue";
 
 defineProps({
@@ -44,14 +41,4 @@ const createTagForm = useForm({
     name: "",
     categories: [],
 });
-
-const handleCheckboxChange = (name) => {
-    if (createTagForm.categories.includes(name)) {
-        createTagForm.categories = createTagForm.categories.filter(
-            (category) => category !== name
-        );
-    } else {
-        createTagForm.categories.push(name);
-    }
-};
 </script>

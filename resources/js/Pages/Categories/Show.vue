@@ -1,11 +1,12 @@
 <template>
-    <div>
+    <div class="flex flex-col gap-4">
         <Deferred data="category">
             <Link
                 :href="
                     route('admin.categories.edit', { category: category.slug })
                 "
                 v-if="currentUser && currentUser.isStaff"
+                class="self-start"
             >
                 <Button>Update category</Button>
             </Link>
@@ -13,18 +14,20 @@
                 <p>Loading category...</p>
             </template>
 
-            {{ category }}
+            <p class="text-3xl font-semibold">{{ category.name }}</p>
         </Deferred>
         <Deferred data="articles">
             <template #fallback>
                 <p>Loading articles...</p>
             </template>
 
-            <Article
-                v-for="article in articles.data"
-                :key="article.slug"
-                :article="article"
-            />
+            <div class="flex flex-col">
+                <Article
+                    v-for="article in articles.data"
+                    :key="article.slug"
+                    :article="article"
+                />
+            </div>
             <Pagination :links="articles.links" :pagination="articles.meta" />
         </Deferred>
     </div>

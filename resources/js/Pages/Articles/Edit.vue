@@ -114,15 +114,25 @@
                 Update
             </Button>
         </form>
+        <Link
+            :href="
+                route('articles.destroy', {
+                    article: article.slug,
+                })
+            "
+            method="DELETE"
+        >
+            <Button extraClasses="!bg-red-500 enabled:hover:!bg-red-700 w-full">
+                Delete article
+            </Button>
+        </Link>
     </div>
 </template>
 
 <script setup>
 import { ref, computed } from "vue";
-import { useForm } from "@inertiajs/vue3";
+import { useForm, Link } from "@inertiajs/vue3";
 import route from "@/Composables/Route";
-
-import { Icon } from "@iconify/vue";
 
 import ArticleContentTypePicker from "@/Components/Form/ArticleContentTypePicker.vue";
 import Input from "@/Components/Form/Input.vue";

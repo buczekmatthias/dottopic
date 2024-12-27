@@ -19,14 +19,14 @@ class TagController extends Controller
 	public function index(): Response
 	{
 		return inertia('Tags/Index', [
-			'tags' => Inertia::defer(fn () => TagResource::collection(Tag::select(['name', 'slug'])->withCount(['articles', 'categories'])->alphabetically()->paginate(100)))
+			'tags' => Inertia::defer(fn () => TagResource::collection(Tag::select(['name', 'slug'])->withCount(['articles', 'categories'])->alphabetically()->paginate(50)))
 		]);
 	}
 
 	public function create(): Response
 	{
 		return inertia('Tags/Create', [
-			'categories' => Category::select(['name'])->alphabetically()->get()
+			'categories' => Category::select(['name', 'slug'])->alphabetically()->get()
 		]);
 	}
 
@@ -46,7 +46,7 @@ class TagController extends Controller
 				'articles'
 			),
 			'categories' => Inertia::defer(
-				fn () => CategoryResource::collection($tag->categories()->paginate(30, pageName: 'categoriesPage')),
+				fn () => CategoryResource::collection($tag->categories()->withCount('articles')->paginate(30, pageName: 'categoriesPage')),
 				'categories'
 			)
 		]);
@@ -58,7 +58,7 @@ class TagController extends Controller
 
 		return inertia('Tags/Edit', [
 			'tag' => $tag,
-			'categories' => Category::select(['name'])->alphabetically()->get()
+			'categories' => Category::select(['name', 'slug'])->alphabetically()->get()
 		]);
 	}
 

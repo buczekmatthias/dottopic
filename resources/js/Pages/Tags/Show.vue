@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="flex flex-col gap-4">
         <Deferred data="tag">
             <template #fallback>
                 <p>Loading tag...</p>
@@ -8,22 +8,26 @@
             <Link
                 :href="route('admin.tags.edit', { tag: tag.slug })"
                 v-if="currentUser && currentUser.isStaff"
+                class="self-start"
             >
                 <Button>Update tag</Button>
             </Link>
 
-            {{ tag }}
+            <p class="text-3xl font-semibold">{{ tag.name }}</p>
         </Deferred>
         <Deferred data="articles">
             <template #fallback>
                 <p>Loading articles...</p>
             </template>
 
-            <Article
-                v-for="article in articles.data"
-                :key="article.slug"
-                :article="article"
-            />
+            <div class="flex flex-col">
+                <p class="text-2xl font-semibold my-3">Articles</p>
+                <Article
+                    v-for="article in articles.data"
+                    :key="article.slug"
+                    :article="article"
+                />
+            </div>
             <Pagination :links="articles.links" :pagination="articles.meta" />
         </Deferred>
         <Deferred data="categories">
@@ -31,7 +35,20 @@
                 <p>Loading categories...</p>
             </template>
 
-            {{ categories }}
+            <div class="flex flex-col">
+                <p class="text-2xl font-semibold my-3">Categories</p>
+                <div
+                    class="flex flex-col gap-3 items-start odd:border-y border-solid border-y-input-default py-4"
+                    v-for="category in categories.data"
+                    :key="category.name"
+                >
+                    <Category :category="category" />
+                </div>
+            </div>
+            <Pagination
+                :links="categories.links"
+                :pagination="categories.meta"
+            />
         </Deferred>
     </div>
 </template>
@@ -44,6 +61,7 @@ import route from "@/Composables/Route";
 import Button from "@/Components/Form/Button.vue";
 import Article from "@/Components/UI/Article.vue";
 import Pagination from "@/Components/Pagination.vue";
+import Category from "@/Components/UI/Category.vue";
 
 defineProps({
     tag: Object,

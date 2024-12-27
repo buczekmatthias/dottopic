@@ -25,7 +25,7 @@ class CategoryController extends Controller
 	public function create(): Response
 	{
 		return inertia('Categories/Create', [
-			'tags' => Tag::select(['name'])->alphabetically()->get()
+			'tags' => Tag::select(['name', 'slug'])->alphabetically()->get()
 		]);
 	}
 
@@ -41,7 +41,7 @@ class CategoryController extends Controller
 		return inertia('Categories/Show', [
 			'category' => Inertia::defer(fn () => CategoryResource::make($category)),
 			'articles' => Inertia::defer(
-				fn () => CompactArticleResource::collection($category->articles()->with(['author', 'category'])->paginate(20)),
+				fn () => CompactArticleResource::collection($category->articles()->with(['author'])->paginate(20)),
 				'articles'
 			)
 		]);
@@ -53,7 +53,7 @@ class CategoryController extends Controller
 
 		return inertia('Categories/Edit', [
 			'category' => ['name' => $category->name, 'slug' => $category->slug, 'tags' => $category->tags],
-			'tags' => Tag::select(['name'])->alphabetically()->get()
+			'tags' => Tag::select(['name', 'slug'])->alphabetically()->get()
 		]);
 	}
 

@@ -53,6 +53,7 @@
             </form>
         </template>
         <div class="grid grid-cols-[8fr_1fr] gap-4">
+            <!-- TODO: Possible redesign for reactions / article comments in general -->
             <Reactions
                 type="comment"
                 :identifier="comment.slug"

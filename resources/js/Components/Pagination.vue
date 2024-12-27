@@ -13,7 +13,7 @@
         </p>
         <div class="flex gap-2" v-if="pagination.last_page !== 1">
             <Link
-                :href="links.first"
+                :href="links.first || 'null'"
                 class="link"
                 :class="{
                     'disabled-link': pagination.current_page === 1,
@@ -22,7 +22,7 @@
                 <Icon icon="octicon:move-to-start-24" height="16" width="16" />
             </Link>
             <Link
-                :href="links.prev"
+                :href="links.prev || 'null'"
                 class="link"
                 :class="{
                     'disabled-link': pagination.current_page === 1,
@@ -31,7 +31,7 @@
                 <Icon icon="octicon:arrow-left-24" height="16" width="16" />
             </Link>
             <Link
-                :href="links.next"
+                :href="links.next || 'null'"
                 class="link"
                 :class="{
                     'disabled-link':
@@ -41,7 +41,7 @@
                 <Icon icon="octicon:arrow-right-24" height="16" width="16" />
             </Link>
             <Link
-                :href="links.last"
+                :href="links.last || 'null'"
                 class="link"
                 :class="{
                     'disabled-link':

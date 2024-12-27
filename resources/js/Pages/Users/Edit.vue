@@ -11,7 +11,6 @@
                 )
             "
         >
-            <!-- TODO: Custom label for file upload -->
             <File
                 label="Profile picture"
                 :error="imageForm.errors.image"

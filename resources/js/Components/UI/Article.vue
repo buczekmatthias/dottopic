@@ -4,6 +4,7 @@
     >
         <div class="flex flex-col items-start">
             <Link
+                v-if="article.category"
                 :href="
                     route('categories.show', {
                         category: article.category.slug,

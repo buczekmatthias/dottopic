@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="flex flex-col gap-3">
         <form
             @submit.prevent="
                 updateCategoryForm.patch(
@@ -15,68 +15,50 @@
                 :error="updateCategoryForm.errors.name"
                 v-model="updateCategoryForm.name"
             />
-            <div class="flex flex-wrap gap-3.5">
-                <!-- TODO: Create Multiselect component instead -->
-                <Checkbox
-                    :label="tag.name"
-                    v-for="tag in tags"
-                    :key="tag.name"
-                    :value="updateCategoryForm.tags.includes(tag.name)"
-                    @change="handleCheckboxChange(tag.name)"
-                />
-            </div>
+
+            <MultiSelect
+                label="Tags"
+                :error="updateCategoryForm.errors.tags"
+                v-model="updateCategoryForm.tags"
+                :content="tags"
+            />
             <Button
                 :isProcessing="updateCategoryForm.processing"
                 processingText="Updating"
             >
-                Update tag
+                Update category
             </Button>
         </form>
-        <Button
-            extraClasses="!bg-red-500 enabled:hover:!bg-red-700"
-            @click="
-                router.delete(
-                    route('admin.categories.destroy', {
-                        category: category.slug,
-                    })
-                )
+        <Link
+            :href="
+                route('admin.categories.destroy', {
+                    category: category.slug,
+                })
             "
+            method="DELETE"
         >
-            Delete
-        </Button>
-        {{ updateCategoryForm }}
+            <Button extraClasses="!bg-red-500 enabled:hover:!bg-red-700 w-full">
+                Delete category
+            </Button>
+        </Link>
     </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { router, useForm } from "@inertiajs/vue3";
+import { useForm, Link } from "@inertiajs/vue3";
 import route from "@/Composables/Route";
 
 import Input from "@/Components/Form/Input.vue";
-import Checkbox from "@/Components/Form/Checkbox.vue";
+import MultiSelect from "@/Components/Form/MultiSelect.vue";
 import Button from "@/Components/Form/Button.vue";
 
 const props = defineProps({
     category: Object,
     tags: Object,
 });
-// TODO: Fix all checkboxes triggering while nothing is added to array and can't remove
-
-// const formCategories = ref(props.category.categories);
 
 const updateCategoryForm = useForm({
     name: props.category.name,
     tags: props.category.tags,
 });
-
-const handleCheckboxChange = (name) => {
-    if (updateCategoryForm.tags.includes(name)) {
-        updateCategoryForm.tags = updateCategoryForm.tags.filter(
-            (tag) => tag !== name
-        );
-    } else {
-        updateCategoryForm.tags.push(name);
-    }
-};
 </script>

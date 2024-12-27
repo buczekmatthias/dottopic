@@ -23,9 +23,12 @@ class UserController extends Controller
 {
 	public function index(Request $request): Response
 	{
+		$type = $request->get('type', '');
+
 		return inertia('Users/Index', [
-			'users' => Inertia::defer(fn () => UserActions::getUsersList($request->get('type', ''), $request->get('page', 1))),
-			'types' => UserRole::values()
+			'users' => Inertia::defer(fn () => UserActions::getUsersList($type, $request->get('page', 1))),
+			'types' => UserRole::values(),
+			'tab' => $type
 		]);
 	}
 
