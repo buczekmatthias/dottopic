@@ -89,7 +89,7 @@ class UserController extends Controller
 		$user->image = null;
 		$user->save();
 
-		return back();
+		return to_route('users.show', ['user' => $user->username], status: 303);
 	}
 
 	public function destroy(User $user): RedirectResponse

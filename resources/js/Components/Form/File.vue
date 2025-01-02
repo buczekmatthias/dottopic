@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col gap-0.5">
-        <label class="flex flex-col gap-1.5">
+        <label class="flex flex-col gap-1.5" :class="labelClasses">
             <slot>
                 <p v-if="label">
                     {{ label }}
@@ -44,18 +44,37 @@
             </template>
         </template>
         <div class="flex flex-wrap" v-if="previews.length > 0">
-            <template v-for="item in previews" :key="item.url">
-                <img
-                    :src="item.url"
-                    alt=""
-                    v-if="item.isImage"
-                    class="h-24 w-24 rounded-md object-contain"
-                />
-                <video
-                    :src="item.url"
-                    v-else
-                    class="h-24 w-24 rounded-md"
-                ></video>
+            <template v-if="teleportTo">
+                <Teleport :to="teleportTo">
+                    <template v-for="item in previews" :key="item.url">
+                        <img
+                            :src="item.url"
+                            alt=""
+                            v-if="item.isImage"
+                            class="h-24 w-24 rounded-md object-contain"
+                        />
+                        <video
+                            :src="item.url"
+                            v-else
+                            class="h-24 w-24 rounded-md"
+                        ></video>
+                    </template>
+                </Teleport>
+            </template>
+            <template v-else>
+                <template v-for="item in previews" :key="item.url">
+                    <img
+                        :src="item.url"
+                        alt=""
+                        v-if="item.isImage"
+                        class="h-24 w-24 rounded-md object-contain"
+                    />
+                    <video
+                        :src="item.url"
+                        v-else
+                        class="h-24 w-24 rounded-md"
+                    ></video>
+                </template>
             </template>
         </div>
     </div>
@@ -66,12 +85,14 @@ import { ref } from "vue";
 
 defineProps({
     label: String,
+    labelClasses: String,
     required: { type: Boolean, default: true },
     error: String | Array,
     helpText: String,
     mimes: Array,
     isDisabled: { type: Boolean, default: false },
     multiple: { type: Boolean, default: false },
+    teleportTo: String,
 });
 
 const previews = ref([]);

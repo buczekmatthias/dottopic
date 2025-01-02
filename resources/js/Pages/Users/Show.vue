@@ -4,7 +4,7 @@
             <UserImage
                 :image="user.image"
                 :initials="user.initials"
-                size="h-48 w-48"
+                size="h-48 w-48 text-4xl"
             />
             <UserRole :role="user.role" />
             <p class="flex flex-col gap-1 items-center">

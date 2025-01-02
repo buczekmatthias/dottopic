@@ -6,6 +6,7 @@
             </p>
             <textarea
                 :disabled="isDisabled"
+                :maxlength="limit"
                 class="p-1.5 rounded-md border border-solid resize-y min-h-12 h-24 max-h-48"
                 :class="{
                     'border-input-default focus:border-input-focus':
@@ -46,6 +47,7 @@ defineProps({
     error: String | Array,
     helpText: String,
     isDisabled: { type: Boolean, default: false },
+    limit: Number,
 });
 
 const model = defineModel();

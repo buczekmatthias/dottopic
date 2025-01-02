@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\Enum\UserRole;
 use App\Http\Resources\UserResource;
+use App\Models\Reaction;
 use App\Models\User;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\UploadedFile;
@@ -47,10 +48,17 @@ final class UserActions
 				$article->author_id = null;
 				$article->save();
 			});
+
 			$user->comments()->get()->each(function ($comment) {
 				$comment->author_id = null;
 				$comment->save();
 			});
+
+			Reaction::where('user_id', $user->id)->delete();
+
+			if ($user->image) {
+				Storage::delete("pfp/{$user->image}");
+			}
 
 			$user->delete();
 		});

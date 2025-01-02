@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class UserEditResource extends JsonResource
 {
@@ -18,7 +19,7 @@ class UserEditResource extends JsonResource
 			'name' => $this->name,
 			'username' => $this->username,
 			'email' => $this->email,
-			'image' => $this->image,
+			'image' => $this->image ? asset(Storage::url("pfp/{$this->image}")) : null,
 			'bio' => $this->bio,
 		];
 	}
