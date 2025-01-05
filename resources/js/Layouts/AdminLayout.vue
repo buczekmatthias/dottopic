@@ -1,7 +1,11 @@
 <template>
     <div class="bg-container">
-        <slot />
+        <AdminNavigation>
+            <slot />
+        </AdminNavigation>
     </div>
 </template>
 
-<script setup></script>
+<script setup>
+import AdminNavigation from "@/Components/Navigation/AdminNavigation.vue";
+</script>

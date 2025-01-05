@@ -1,5 +1,17 @@
 <template>
-    <div>
+    <div class="flex flex-col gap-4">
+        <Link
+            :href="route('articles.show', { article: article.slug })"
+            class="flex gap-1.5 items-center self-start hover:gap-2 duration-150"
+        >
+            <Icon
+                icon="octicon:arrow-left-16"
+                class="mt-1"
+                height="16"
+                width="16"
+            />
+            Return to article
+        </Link>
         <form
             @submit.prevent="
                 articleEditForm.post(
@@ -114,18 +126,6 @@
                 Update
             </Button>
         </form>
-        <Link
-            :href="
-                route('articles.destroy', {
-                    article: article.slug,
-                })
-            "
-            method="DELETE"
-        >
-            <Button extraClasses="!bg-red-500 enabled:hover:!bg-red-700 w-full">
-                Delete article
-            </Button>
-        </Link>
     </div>
 </template>
 
@@ -142,6 +142,8 @@ import Select from "@/Components/Form/Select.vue";
 import MultiSelect from "@/Components/Form/MultiSelect.vue";
 import Button from "@/Components/Form/Button.vue";
 import ContentElement from "@/Components/Form/ContentElement.vue";
+
+import { Icon } from "@iconify/vue";
 
 const props = defineProps({
     article: Object,

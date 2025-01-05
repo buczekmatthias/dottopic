@@ -22,3 +22,15 @@ select,
 textarea {
     @apply !ring-0 !outline-none bg-input;
 }
+
+@layer components {
+    #dashboard .box {
+        @apply flex flex-col gap-1 lg:gap-2;
+    }
+    #dashboard .header {
+        @apply uppercase max-lg:text-xs;
+    }
+    #dasboard .content {
+        @apply text-xl;
+    }
+}
