@@ -5,30 +5,40 @@
         <div
             class="col-span-full p-2 h-14 flex items-center justify-between sticky top-0 z-20 bg-container border-b border-solid border-b-input-default"
         >
-            <p class="text-2xl font-semibold">
-                <span class="text-link">dot</span>Topic
-            </p>
+            <div class="flex gap-2">
+                <Link :href="route('homepage')">
+                    <Icon
+                        icon="octicon:arrow-left-16"
+                        width="24"
+                        height="24"
+                        class="text-link mt-1"
+                    />
+                </Link>
+                <p class="text-2xl font-semibold">
+                    <span class="text-link">dot</span>Topic
+                </p>
+            </div>
             <NavigationUserBox />
         </div>
         <div
             class="h-[calc(100vh-3.5rem)] flex flex-col items-center justify-center gap-4 sticky top-14 z-20 bg-container border-r border-solid border-r-input-default py-3 lg:py-5"
         >
-            <!-- ? Back to app link -->
+            <!-- ? All admin links -->
             <Link
-                :href="route('homepage')"
-                class="p-2.5 lg:py-3 lg:px-6 rounded-md border-r border-solid border-r-transparent"
+                :href="route('admin.dashboard')"
+                class="p-2.5 lg:py-3 lg:px-6 rounded-md border-2 border-solid border-transparent"
                 :class="{
-                    'bg-link [&>*]:text-white': isActiveRoute('homepage'),
+                    'bg-link [&>*]:text-white':
+                        isActiveRoute('admin.dashboard'),
                 }"
             >
                 <Icon
-                    icon="octicon:home-16"
+                    icon="octicon:diamond-16"
                     width="24"
                     height="24"
                     class="text-link"
                 />
             </Link>
-            <!-- ? All admin links -->
             <Link
                 :href="route(link.route + '.index')"
                 v-for="link in navigation"
@@ -62,7 +72,6 @@ import route, {
     isActiveRoute,
     isCurrentRouteInGroup,
 } from "@/Composables/Route";
-import currentUser from "@/Composables/User";
 
 import { Icon } from "@iconify/vue";
 
@@ -71,19 +80,19 @@ import Breadcrumbs from "@/Components/UI/Breadcrumbs.vue";
 
 const navigation = [
     {
-        route: "articles",
+        route: "admin.articles",
         icon: "octicon:file",
     },
     {
-        route: "categories",
+        route: "admin.categories",
         icon: "octicon:file-directory-16",
     },
     {
-        route: "tags",
+        route: "admin.tags",
         icon: "octicon:tag-16",
     },
     {
-        route: "users",
+        route: "admin.users",
         icon: "octicon:person-16",
     },
 ];

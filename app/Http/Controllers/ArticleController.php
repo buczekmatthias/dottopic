@@ -13,7 +13,6 @@ use App\Models\Category;
 use App\Models\Tag;
 use App\Services\Reactions;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Inertia\Inertia;
@@ -28,7 +27,7 @@ class ArticleController extends Controller implements HasMiddleware
 		];
 	}
 
-	public function index(Request $request): Response
+	public function index(): Response
 	{
 		return inertia('Articles/Index', [
 			'articles' => Inertia::defer(fn () => CompactArticleResource::collection(Article::with(['author', 'category'])->withCount(['reactions', 'comments'])->latest()->paginate(20)))

@@ -90,16 +90,20 @@ final class Routes
 		return [
 			...self::getWriterRoutes(),
 			'admin.dashboard',
+			'admin.categories.index',
 			'admin.categories.create',
 			'admin.categories.store',
 			'admin.categories.edit',
 			'admin.categories.update',
 			'admin.categories.destroy',
+			'admin.tags.index',
 			'admin.tags.create',
 			'admin.tags.store',
 			'admin.tags.edit',
 			'admin.tags.update',
 			'admin.tags.destroy',
+			'admin.articles.index',
+			'admin.users.index'
 		];
 	}
 

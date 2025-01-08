@@ -21,7 +21,7 @@ class CompactArticleResource extends JsonResource
 			'slug' => $this->slug,
 			'created_at' => $this->created_at->format('F j, Y'),
 			'reactions_count' => $this->whenCounted('reactions'),
-			'comments_count' => $this->whenCounted('comments')
+			'comments_count' => $this->whenCounted('comments'),
 		];
 
 		if ($this->description) {

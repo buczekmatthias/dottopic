@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AppController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CategoryController;
@@ -46,5 +47,12 @@ Route::prefix('admin')->name('admin.')->middleware('mod')->group(function () {
 	Route::controller(UserController::class)->middleware('admin')->prefix('users')->name('users.')->group(function () {
 		Route::get('{user}/promote', 'promote')->name('promote');
 		Route::get('{user}/demote', 'demote')->name('demote');
+	});
+
+	Route::controller(AdminController::class)->group(function () {
+		Route::get('/articles', 'articles')->name('articles.index');
+		Route::get('/categories', 'categories')->name('categories.index');
+		Route::get('/tags', 'tags')->name('tags.index');
+		Route::get('/users', 'users')->name('users.index');
 	});
 });

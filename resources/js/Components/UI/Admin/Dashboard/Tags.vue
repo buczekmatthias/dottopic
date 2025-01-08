@@ -44,13 +44,16 @@
 </template>
 
 <script setup>
-import Table from "@/Components/UI/Table.vue";
+import Table from "@/Components/UI/Admin/Table.vue";
 
 defineProps({
     stats: Object,
 });
 
-const tableHeaders = ["name", "articles"];
+const tableHeaders = [
+    { column: "name", header: "name", as: "text" },
+    { column: "articles_count", header: "articles", as: "text" },
+];
 
 const tableActions = [
     {
@@ -64,5 +67,8 @@ const tableActions = [
 
 const tableHiddenData = ["slug"];
 
-const tableColumnSizes = ["max-w-80 text-left", "text-center"];
+const tableColumnSizes = {
+    name: "max-w-80 text-left truncate",
+    articles_count: "text-center",
+};
 </script>

@@ -62,7 +62,7 @@
 <script setup>
 import { computed } from "vue";
 
-import Table from "@/Components/UI/Table.vue";
+import Table from "@/Components/UI/Admin/Table.vue";
 
 const props = defineProps({
     stats: Object,
@@ -72,7 +72,12 @@ const metrics = computed(
     () => props.stats.monthly.current - props.stats.monthly.last
 );
 
-const tableHeaders = ["title", "created at", "reactions", "comments"];
+const tableHeaders = [
+    { column: "title", header: "title", as: "text" },
+    { column: "reactions_count", header: "reactions", as: "text" },
+    { column: "comments_count", header: "comments", as: "text" },
+    { column: "created_at", header: "created", as: "text" },
+];
 
 const tableActions = [
     {
@@ -86,10 +91,10 @@ const tableActions = [
 
 const tableHiddenData = ["slug"];
 
-const tableColumnSizes = [
-    "max-w-80 text-left",
-    "text-left",
-    "text-center",
-    "text-center",
-];
+const tableColumnSizes = {
+    title: "max-w-80 text-left truncate",
+    reactions_count: "text-center",
+    comments_count: "text-center",
+    created_at: "text-left",
+};
 </script>

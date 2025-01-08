@@ -2,15 +2,14 @@
 
 namespace App\Services;
 
-use App\Http\Resources\CategoryResource;
-use App\Http\Resources\CompactArticleResource;
-use App\Http\Resources\TagResource;
+use App\Http\Resources\Admin\ArticleResource;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\Tag;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Inertia\Inertia;
 
@@ -64,21 +63,26 @@ class Dashboard
 
 	private static function getPopularArticlesBetween(array $datesBetween): AnonymousResourceCollection
 	{
-		return CompactArticleResource::collection(
-			Article::select(['title', 'slug', 'created_at'])
-			->whereBetween('created_at', $datesBetween)
+		return ArticleResource::collection(
+			Article::select(['id', 'title', 'slug', 'created_at'])
+			->whereHas('reactions', function (Builder $query) use ($datesBetween) {
+				$query->whereBetween('created_at', $datesBetween);
+			})
+			->orWhereHas('comments', function (Builder $query) use ($datesBetween) {
+				$query->whereBetween('created_at', $datesBetween);
+			})
 			->withCount(['reactions', 'comments'])
 			->orderBy('reactions_count', 'DESC')
 			->orderBy('comments_count', 'DESC')
+			->orderBy('created_at', 'DESC')
 			->limit(5)
 			->get()
 		);
 	}
 
-	private static function getPopularCategoriesBetween(array $datesBetween): AnonymousResourceCollection
+	private static function getPopularCategoriesBetween(array $datesBetween): Collection
 	{
-		return CategoryResource::collection(
-			Category::select(['name', 'slug'])
+		return Category::select(['id', 'name', 'slug'])
 			->whereHas('articles', function (Builder $query) use ($datesBetween) {
 				$query->whereBetween('created_at', $datesBetween);
 			})
@@ -86,14 +90,12 @@ class Dashboard
 			->orderBy('articles_count', 'DESC')
 			->orderBy('name', 'ASC')
 			->limit(5)
-			->get()
-		);
+			->get();
 	}
 
-	private static function getPopularTagsBetween(array $datesBetween): AnonymousResourceCollection
+	private static function getPopularTagsBetween(array $datesBetween): Collection
 	{
-		return TagResource::collection(
-			Tag::select(['name', 'slug'])
+		return Tag::select(['id', 'name', 'slug'])
 			->whereHas('articles', function (Builder $query) use ($datesBetween) {
 				$query->whereBetween('created_at', $datesBetween);
 			})
@@ -101,7 +103,6 @@ class Dashboard
 			->orderBy('articles_count', 'DESC')
 			->orderBy('name', 'ASC')
 			->limit(5)
-			->get()
-		);
+			->get();
 	}
 }

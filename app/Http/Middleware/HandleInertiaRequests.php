@@ -40,7 +40,7 @@ class HandleInertiaRequests extends Middleware
 	 */
 	public function share(Request $request): array
 	{
-		return array_merge(parent::share($request), [
+		$data = [
 			'auth.user' => fn () => $request->user() ? [
 				...$request->user()->only('name', 'username', 'image', 'initials', 'role'),
 				'isStaff' => $request->user()->isMod() || $request->user()->isAdmin() || $request->user()->isDev()
@@ -51,6 +51,15 @@ class HandleInertiaRequests extends Middleware
 				'current' => Route::currentRouteName(),
 				'ziggy' => (new Ziggy())->filter(Routes::getSharedRoutes())->toArray()
 			]
-		]);
+		];
+
+		if ($request->routeIs('admin.*.index')) {
+			$data['sorting'] = [
+				'column' => $request->get('column', 'id'),
+				'order' => $request->get('order', 'asc')
+			];
+		}
+
+		return array_merge(parent::share($request), $data);
 	}
 }
