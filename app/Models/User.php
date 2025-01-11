@@ -75,9 +75,14 @@ class User extends Authenticatable
 		return $this->role === UserRole::ADMIN;
 	}
 
-	public function isDev(): bool
+	public function isStaff(): bool
 	{
-		return $this->role === UserRole::DEV;
+		return $this->isMod() || $this->isAdmin();
+	}
+
+	public function isDeveloper(): bool
+	{
+		return in_array($this->role, [UserRole::DEV, UserRole::CREATOR]);
 	}
 
 	public function scopeType(Builder $query, string $role)

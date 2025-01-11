@@ -23,7 +23,7 @@ final class Routes
 			return self::getModRoutes();
 		}
 
-		if ($currentUser->isAdmin() || $currentUser->isDev()) {
+		if ($currentUser->isAdmin() || $currentUser->isDeveloper()) {
 			return self::getAdminRoutes();
 		}
 

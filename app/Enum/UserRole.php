@@ -11,4 +11,5 @@ enum UserRole: string
 	case MOD = "mod";
 	case ADMIN = "admin";
 	case DEV = "dev";
+	case CREATOR = "creator";
 }

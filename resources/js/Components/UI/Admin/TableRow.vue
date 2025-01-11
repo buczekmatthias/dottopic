@@ -6,6 +6,7 @@
             :class="[
                 'border border-solid border-input-default',
                 sizes[element.column],
+                element?.useAsClass ? entry[element.column].toLowerCase() : '',
             ]"
         >
             <template v-if="element.as === 'text'">
@@ -34,24 +35,20 @@
             <div class="w-min mx-auto flex gap-2">
                 <template v-for="(action, j) in actions" :key="j">
                     <template
-                        v-if="action.parameterKey && action.parameterValue"
+                        v-if="action?.disabledKey && !entry[action.disabledKey]"
                     >
-                        <Link
-                            :href="
-                                route(action.route, {
-                                    [action.parameterKey]:
-                                        entry[action.parameterValue],
-                                })
-                            "
-                            :method="action?.method || 'GET'"
-                            :class="action?.color"
-                        >
-                            <Icon :icon="action.icon" />
-                        </Link>
+                        <Icon :icon="action.icon" class="text-slate-500" />
                     </template>
                     <template v-else>
                         <Link
-                            :href="route(action.route)"
+                            :href="
+                                action.parameterKey && action.parameterValue
+                                    ? route(action.route, {
+                                          [action.parameterKey]:
+                                              entry[action.parameterValue],
+                                      })
+                                    : route(action.route)
+                            "
                             :method="action?.method || 'GET'"
                             :class="action?.color"
                         >

@@ -23,6 +23,25 @@ textarea {
     @apply !ring-0 !outline-none bg-input;
 }
 
+.user {
+    @apply bg-slate-400/20 text-slate-400;
+}
+.writer {
+    @apply bg-amber-500/20 text-amber-500;
+}
+.mod {
+    @apply bg-rose-500/20 text-rose-500;
+}
+.admin {
+    @apply bg-teal-500/20 text-teal-500;
+}
+.dev {
+    @apply bg-purple-400/20 text-purple-300;
+}
+.creator {
+    @apply bg-orange-700/20 text-orange-400;
+}
+
 @layer components {
     #dashboard .box {
         @apply flex flex-col gap-1 lg:gap-2;

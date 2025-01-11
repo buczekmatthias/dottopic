@@ -42,7 +42,6 @@
 </template>
 
 <script setup>
-// TODO: Fix table everywhere
 import TableHeader from "@/Components/UI/Admin/TableHeader.vue";
 import TableRow from "@/Components/UI/Admin/TableRow.vue";
 

@@ -15,7 +15,7 @@ class ModMiddleware
 	 */
 	public function handle(Request $request, Closure $next): Response
 	{
-		if ($request->user() && ($request->user()->isMod() || $request->user()->isAdmin() || $request->user()->isDev())) {
+		if ($request->user() && ($request->user()->isStaff() || $request->user()->isDeveloper())) {
 			return $next($request);
 		}
 

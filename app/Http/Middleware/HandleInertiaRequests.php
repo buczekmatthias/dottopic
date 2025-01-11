@@ -43,7 +43,7 @@ class HandleInertiaRequests extends Middleware
 		$data = [
 			'auth.user' => fn () => $request->user() ? [
 				...$request->user()->only('name', 'username', 'image', 'initials', 'role'),
-				'isStaff' => $request->user()->isMod() || $request->user()->isAdmin() || $request->user()->isDev()
+				'isStaff' => $request->user()->isStaff() || $request->user()->isDeveloper()
 			] : null,
 			'breadcrumbs' => Breadcrumbs::getBreadcrumbs(),
 			'errors' => Session::get('errors') ? Session::get('errors')->getBag('default')->getMessages() : [],

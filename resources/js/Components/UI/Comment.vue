@@ -1,6 +1,7 @@
 <template>
     <div
         class="flex flex-col gap-2 border border-solid border-input-default rounded-md p-2"
+        :id="comment.slug"
     >
         <div class="flex items-center justify-between">
             <p>

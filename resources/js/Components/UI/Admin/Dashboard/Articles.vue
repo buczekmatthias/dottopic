@@ -28,9 +28,9 @@
                 <p class="content">{{ stats.monthly.last }}</p>
             </div>
         </div>
-        <div class="border border-solid border-input-default rounded-md w-full">
+        <div class="border border-solid border-input-default w-full">
             <p
-                class="text-xl font-semibold px-2.5 py-4 border-b border-solid border-b-input-default"
+                class="text-xl font-semibold px-2.5 py-4 border-b border-solid border-b-input-default rounded-md"
             >
                 Popular this month
             </p>

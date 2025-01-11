@@ -11,6 +11,7 @@ use App\Http\Resources\CompactArticleResource;
 use App\Http\Resources\UserEditResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Services\Roles;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -101,9 +102,23 @@ class UserController extends Controller
 
 	public function promote(User $user)
 	{
+		if (Roles::canBePromoted($user)) {
+			$user->role = Roles::getRoleToPromoteTo($user);
+
+			$user->save();
+		}
+
+		return back();
 	}
 
 	public function demote(User $user)
 	{
+		if (Roles::canBeDemoted($user)) {
+			$user->role = Roles::getRoleToDemoteTo($user);
+
+			$user->save();
+		}
+
+		return back();
 	}
 }
