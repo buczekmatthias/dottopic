@@ -19,7 +19,7 @@ class UserEditResource extends JsonResource
 			'name' => $this->name,
 			'username' => $this->username,
 			'email' => $this->email,
-			'image' => $this->image ? asset(Storage::url("pfp/{$this->image}")) : null,
+			'image' => $this->when($this->image, asset(Storage::url("pfp/{$this->image}"))),
 			'bio' => $this->bio,
 		];
 	}

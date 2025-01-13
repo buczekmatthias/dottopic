@@ -19,7 +19,7 @@ class UserResource extends JsonResource
 		return [
 			'name' => $this->name,
 			'username' => $this->username,
-			'image' => $this->image ? asset(Storage::url("pfp/{$this->image}")) : null,
+			'image' => $this->when($this->image, asset(Storage::url("pfp/{$this->image}"))),
 			'initials' => $this->initials,
 			'bio' => $this->bio,
 			'role' => Str::ucfirst($this->role->value),
