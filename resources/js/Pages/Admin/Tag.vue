@@ -2,7 +2,7 @@
     <div class="grid grid-cols-1 gap-4">
         <Deferred data="tags">
             <template #fallback>
-                <div>Loading tags...</div>
+                <DeferredLoader text="Loading tags" />
             </template>
 
             <Table
@@ -24,6 +24,7 @@ import { Deferred } from "@inertiajs/vue3";
 
 import Pagination from "@/Components/Pagination.vue";
 import Table from "@/Components/UI/Admin/Table.vue";
+import DeferredLoader from "@/Components/DeferredLoader.vue";
 
 defineProps({
     tags: Object,

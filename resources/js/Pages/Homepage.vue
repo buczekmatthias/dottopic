@@ -2,7 +2,7 @@
     <div class="flex flex-col gap-3">
         <Deferred data="latest_articles">
             <template #fallback>
-                <p>Loading latest articles...</p>
+                <DeferredLoader text="Loading latest articles" />
             </template>
 
             <div class="flex flex-col">
@@ -18,7 +18,7 @@
         </Deferred>
         <Deferred data="popular_categories">
             <template #fallback>
-                <p>Loading popular categories...</p>
+                <DeferredLoader text="Loading latest categories" />
             </template>
 
             <div class="flex flex-wrap gap-3">
@@ -48,6 +48,7 @@ import { Deferred, Link } from "@inertiajs/vue3";
 import route from "@/Composables/Route";
 
 import Article from "@/Components/UI/Article.vue";
+import DeferredLoader from "@/Components/DeferredLoader.vue";
 
 defineProps({
     latest_articles: Object,

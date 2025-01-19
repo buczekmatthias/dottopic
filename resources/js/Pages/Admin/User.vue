@@ -2,7 +2,7 @@
     <div class="grid grid-cols-1 gap-4">
         <Deferred data="users">
             <template #fallback>
-                <div>Loading users...</div>
+                <DeferredLoader text="Loading users" />
             </template>
 
             <div class="flex gap-2">
@@ -52,6 +52,7 @@ import route from "@/Composables/Route";
 
 import Pagination from "@/Components/Pagination.vue";
 import Table from "@/Components/UI/Admin/Table.vue";
+import DeferredLoader from "@/Components/DeferredLoader.vue";
 
 defineProps({
     users: Object,

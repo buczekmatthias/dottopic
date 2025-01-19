@@ -2,7 +2,7 @@
     <div class="flex flex-col gap-4">
         <Deferred data="tag">
             <template #fallback>
-                <p>Loading tag...</p>
+                <DeferredLoader text="Loading tag" />
             </template>
 
             <Link
@@ -17,7 +17,7 @@
         </Deferred>
         <Deferred data="articles">
             <template #fallback>
-                <p>Loading articles...</p>
+                <DeferredLoader text="Loading articles" />
             </template>
 
             <div class="flex flex-col">
@@ -32,7 +32,7 @@
         </Deferred>
         <Deferred data="categories">
             <template #fallback>
-                <p>Loading categories...</p>
+                <DeferredLoader text="Loading categories" />
             </template>
 
             <div class="flex flex-col">
@@ -62,6 +62,7 @@ import Button from "@/Components/Form/Button.vue";
 import Article from "@/Components/UI/Article.vue";
 import Pagination from "@/Components/Pagination.vue";
 import Category from "@/Components/UI/Category.vue";
+import DeferredLoader from "@/Components/DeferredLoader.vue";
 
 defineProps({
     tag: Object,

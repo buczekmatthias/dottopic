@@ -2,7 +2,7 @@
     <div class="flex flex-col gap-8" id="dashboard">
         <Deferred data="users">
             <template #fallback>
-                <div>Loading users...</div>
+                <DeferredLoader text="Loading users" />
             </template>
 
             <Users :stats="users" />
@@ -10,7 +10,7 @@
 
         <Deferred data="articles">
             <template #fallback>
-                <div>Loading articles...</div>
+                <DeferredLoader text="Loading articles" />
             </template>
 
             <Articles :stats="articles" />
@@ -18,7 +18,7 @@
 
         <Deferred data="tags">
             <template #fallback>
-                <div>Loading tags...</div>
+                <DeferredLoader text="Loading tags" />
             </template>
 
             <Tags :stats="tags" />
@@ -26,7 +26,7 @@
 
         <Deferred data="categories">
             <template #fallback>
-                <div>Loading categories...</div>
+                <DeferredLoader text="Loading categories" />
             </template>
 
             <Categories :stats="categories" />
@@ -41,6 +41,7 @@ import Articles from "@/Components/UI/Admin/Dashboard/Articles.vue";
 import Categories from "@/Components/UI/Admin/Dashboard/Categories.vue";
 import Tags from "@/Components/UI/Admin/Dashboard/Tags.vue";
 import Users from "@/Components/UI/Admin/Dashboard/Users.vue";
+import DeferredLoader from "@/Components/DeferredLoader.vue";
 
 defineProps({
     users: Object,

@@ -2,7 +2,7 @@
     <div class="flex flex-col gap-4">
         <Deferred data="users">
             <template #fallback>
-                <p>Loading users...</p>
+                <DeferredLoader text="Loading users" />
             </template>
 
             <div class="flex gap-2">
@@ -94,6 +94,7 @@ import { Icon } from "@iconify/vue";
 import UserImage from "@/Components/UI/UserImage.vue";
 import UserRole from "@/Components/UI/UserRole.vue";
 import Pagination from "@/Components/Pagination.vue";
+import DeferredLoader from "@/Components/DeferredLoader.vue";
 
 defineProps({
     users: Object,

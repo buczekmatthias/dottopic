@@ -9,7 +9,7 @@
         </Link>
         <Deferred data="categories">
             <template #fallback>
-                <p>Loading categories..</p>
+                <DeferredLoader text="Loading categories" />
             </template>
 
             <div class="flex flex-col">
@@ -37,6 +37,7 @@ import currentUser from "@/Composables/User";
 import Button from "@/Components/Form/Button.vue";
 import Pagination from "@/Components/Pagination.vue";
 import Category from "@/Components/UI/Category.vue";
+import DeferredLoader from "@/Components/DeferredLoader.vue";
 
 defineProps({
     categories: Object,

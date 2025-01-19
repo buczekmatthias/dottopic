@@ -2,7 +2,7 @@
     <div class="flex flex-col gap-2">
         <Deferred data="article">
             <template #fallback>
-                <p>Loading article...</p>
+                <DeferredLoader text="Loading article" />
             </template>
 
             <div
@@ -113,7 +113,7 @@
             />
             <Deferred data="comments">
                 <template #fallback>
-                    <p>Loading comments...</p>
+                    <DeferredLoader text="Loading comments" />
                 </template>
 
                 <CommentForm
@@ -145,6 +145,7 @@ import Comment from "@/Components/UI/Comment.vue";
 import CommentForm from "@/Components/UI/CommentForm.vue";
 import Reactions from "@/Components/UI/Reactions.vue";
 import Pagination from "@/Components/Pagination.vue";
+import DeferredLoader from "@/Components/DeferredLoader.vue";
 
 const props = defineProps({
     article: Object,

@@ -11,14 +11,14 @@
                 <Button>Update category</Button>
             </Link>
             <template #fallback>
-                <p>Loading category...</p>
+                <DeferredLoader text="Loading category" />
             </template>
 
             <p class="text-3xl font-semibold">{{ category.name }}</p>
         </Deferred>
         <Deferred data="articles">
             <template #fallback>
-                <p>Loading articles...</p>
+                <DeferredLoader text="Loading articles" />
             </template>
 
             <div class="flex flex-col">
@@ -41,6 +41,7 @@ import route from "@/Composables/Route";
 import Button from "@/Components/Form/Button.vue";
 import Article from "@/Components/UI/Article.vue";
 import Pagination from "@/Components/Pagination.vue";
+import DeferredLoader from "@/Components/DeferredLoader.vue";
 
 defineProps({
     category: Object,

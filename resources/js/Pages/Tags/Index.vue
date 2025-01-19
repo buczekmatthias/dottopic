@@ -9,7 +9,7 @@
         </Link>
         <Deferred data="tags">
             <template #fallback>
-                <p>Loading tags...</p>
+                <DeferredLoader text="Loading tags" />
             </template>
 
             <div class="flex flex-col">
@@ -67,6 +67,7 @@ import currentUser from "@/Composables/User";
 
 import Button from "@/Components/Form/Button.vue";
 import Pagination from "@/Components/Pagination.vue";
+import DeferredLoader from "@/Components/DeferredLoader.vue";
 
 import { Icon } from "@iconify/vue";
 

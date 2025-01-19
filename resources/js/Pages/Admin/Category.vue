@@ -2,7 +2,7 @@
     <div class="grid grid-cols-1 gap-4">
         <Deferred data="categories">
             <template #fallback>
-                <div>Loading categories...</div>
+                <DeferredLoader text="Loading categories" />
             </template>
 
             <Table
@@ -27,6 +27,7 @@ import { Deferred } from "@inertiajs/vue3";
 
 import Pagination from "@/Components/Pagination.vue";
 import Table from "@/Components/UI/Admin/Table.vue";
+import DeferredLoader from "@/Components/DeferredLoader.vue";
 
 defineProps({
     categories: Object,

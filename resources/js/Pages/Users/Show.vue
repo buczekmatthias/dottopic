@@ -46,7 +46,7 @@
         </div>
         <Deferred data="content">
             <template #fallback>
-                <p>Loading {{ tab }}...</p>
+                <DeferredLoader :text="`Loading ${tab}`" />
             </template>
 
             <div class="flex flex-col" :class="{ 'gap-4': tab === 'comments' }">
@@ -82,6 +82,7 @@ import UserImage from "@/Components/UI/UserImage.vue";
 import UserRole from "@/Components/UI/UserRole.vue";
 import UserComment from "@/Components/UI/UserComment.vue";
 import Pagination from "@/Components/Pagination.vue";
+import DeferredLoader from "@/Components/DeferredLoader.vue";
 
 defineProps({
     user: Object,
