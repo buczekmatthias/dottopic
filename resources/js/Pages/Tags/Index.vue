@@ -3,9 +3,9 @@
         <Link
             :href="route('admin.tags.create')"
             v-if="currentUser && currentUser.isStaff"
-            class="self-start"
+            class="md:self-start"
         >
-            <Button>Create new tag</Button>
+            <Button extraClasses="w-full">Create new tag</Button>
         </Link>
         <Deferred data="tags">
             <template #fallback>

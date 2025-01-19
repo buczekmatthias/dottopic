@@ -14,7 +14,7 @@
 
             <div class="flex flex-col">
                 <div
-                    class="flex flex-col gap-3 items-start odd:border-y border-solid border-y-input-default py-4"
+                    class="flex max-md:flex-col gap-3 md:gap-5 items-start odd:border-y border-solid border-y-input-default py-4"
                     v-for="category in categories.data"
                     :key="category.name"
                 >

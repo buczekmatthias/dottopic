@@ -1,5 +1,5 @@
 <template>
-    <p class="text-2xl">{{ category.name }}</p>
+    <p class="text-2xl mr-auto">{{ category.name }}</p>
     <div
         class="flex gap-1 items-center text-sm text-slate-400"
         v-if="category.articles_count"

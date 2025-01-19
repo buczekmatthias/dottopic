@@ -1,20 +1,14 @@
 <template>
     <div class="flex flex-col gap-4">
-        <Deferred data="tag">
-            <template #fallback>
-                <DeferredLoader text="Loading tag" />
-            </template>
+        <Link
+            :href="route('admin.tags.edit', { tag: tag.slug })"
+            v-if="currentUser && currentUser.isStaff"
+            class="self-start"
+        >
+            <Button>Update tag</Button>
+        </Link>
 
-            <Link
-                :href="route('admin.tags.edit', { tag: tag.slug })"
-                v-if="currentUser && currentUser.isStaff"
-                class="self-start"
-            >
-                <Button>Update tag</Button>
-            </Link>
-
-            <p class="text-3xl font-semibold">{{ tag.name }}</p>
-        </Deferred>
+        <p class="text-3xl font-semibold">{{ tag.name }}</p>
         <Deferred data="articles">
             <template #fallback>
                 <DeferredLoader text="Loading articles" />
@@ -38,7 +32,7 @@
             <div class="flex flex-col">
                 <p class="text-2xl font-semibold my-3">Categories</p>
                 <div
-                    class="flex flex-col gap-3 items-start odd:border-y border-solid border-y-input-default py-4"
+                    class="flex max-md:flex-col gap-3 md:gap-5 items-start odd:border-y border-solid border-y-input-default py-4"
                     v-for="category in categories.data"
                     :key="category.name"
                 >

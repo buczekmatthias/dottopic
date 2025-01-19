@@ -40,7 +40,7 @@ class TagController extends Controller
 	public function show(Tag $tag): Response
 	{
 		return inertia('Tags/Show', [
-			'tag' => Inertia::defer(fn () => TagResource::make($tag)),
+			'tag' => TagResource::make($tag),
 			'articles' => Inertia::defer(
 				fn () => CompactArticleResource::collection($tag->articles()->with(['author', 'category'])->paginate(20, pageName: 'articlesPage')),
 				'articles'
