@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col gap-3">
+    <div class="grid grid-cols-1 xl:grid-cols-[1fr_auto] gap-3 xl:gap-6">
         <Deferred data="latest_articles">
             <template #fallback>
                 <DeferredLoader text="Loading latest articles" />
@@ -21,7 +21,7 @@
                 <DeferredLoader text="Loading latest categories" />
             </template>
 
-            <div class="flex flex-wrap gap-3">
+            <div class="flex flex-wrap xl:flex-col gap-3">
                 <p class="font-semibold w-full text-2xl lg:text-3xl mb-4">
                     Popular categories
                 </p>
@@ -31,10 +31,10 @@
                     :href="
                         route('categories.show', { category: category.slug })
                     "
-                    class="flex gap-1.5 border border-solid border-slate-300 rounded-md px-2 py-1 duration-150 hover:bg-slate-300/15"
+                    class="flex gap-1.5 xl:justify-between border border-solid border-slate-300 rounded-md px-2 py-1 duration-150 hover:bg-slate-300/15"
                 >
                     <span class="capitalize">{{ category.name }}</span>
-                    <span class="font-light text-slate-300">
+                    <span class="text-sm text-slate-400">
                         {{ category.articles_count }} article(s)
                     </span>
                 </Link>

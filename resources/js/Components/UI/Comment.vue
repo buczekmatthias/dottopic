@@ -4,64 +4,9 @@
         :id="comment.slug"
     >
         <div class="flex items-center justify-between">
-            <p>
-                <Link
-                    :href="
-                        route('users.show', { user: comment.author.username })
-                    "
-                    class="text-link font-semibold"
-                >
-                    {{ comment.author.name }}
-                </Link>
-                wrote:
-            </p>
             <p class="font-light text-slate-300 text-sm">
                 {{ comment.created_at }}
             </p>
-        </div>
-        <p>{{ comment.content }}</p>
-        <template v-if="editComment">
-            <form
-                @submit.prevent="
-                    editCommentForm.patch(
-                        route('comments.update', { comment: comment.slug }),
-                        {
-                            onSuccess: () => {
-                                editCommentForm.reset();
-                                editComment = false;
-                            },
-                        }
-                    )
-                "
-                class="flex flex-wrap gap-3"
-            >
-                <Textarea
-                    v-model="editCommentForm.content"
-                    :error="editCommentForm.errors.content"
-                    class="w-full"
-                    helpText="Provide new content of comment or cancel to discard"
-                />
-                <button
-                    type="button"
-                    @click="
-                        editComment = false;
-                        editCommentForm.reset();
-                    "
-                >
-                    Cancel
-                </button>
-                <button>Save</button>
-            </form>
-        </template>
-        <div class="grid grid-cols-[8fr_1fr] gap-4">
-            <!-- TODO: Possible redesign for reactions / article comments in general -->
-            <Reactions
-                type="comment"
-                :identifier="comment.slug"
-                :reactions="comment.reactions_count"
-                :userReaction="comment.userReaction"
-                :availableReactions="usePage().props.availableReactions"
-            />
             <div
                 class="flex items-center justify-end gap-3"
                 v-if="
@@ -95,6 +40,64 @@
                 </Link>
             </div>
         </div>
+        <p>
+            <Link
+                :href="route('users.show', { user: comment.author.username })"
+                class="text-link font-semibold"
+            >
+                {{ comment.author.name }}
+            </Link>
+            wrote:
+        </p>
+        <p>{{ comment.content }}</p>
+        <template v-if="editComment">
+            <form
+                @submit.prevent="
+                    editCommentForm.patch(
+                        route('comments.update', { comment: comment.slug }),
+                        {
+                            onSuccess: () => {
+                                editCommentForm.reset();
+                                editComment = false;
+                            },
+                        }
+                    )
+                "
+                class="flex flex-wrap gap-3"
+            >
+                <Textarea
+                    v-model="editCommentForm.content"
+                    :error="editCommentForm.errors.content"
+                    class="w-full"
+                    helpText="Provide new content of comment or cancel to discard"
+                />
+                <button
+                    type="button"
+                    @click="
+                        editComment = false;
+                        editCommentForm.reset();
+                    "
+                >
+                    Cancel
+                </button>
+                <button
+                    :disabled="
+                        editCommentForm.content === '' ||
+                        editCommentForm.content === comment.content
+                    "
+                    class="disabled:text-slate-500"
+                >
+                    Save
+                </button>
+            </form>
+        </template>
+        <Reactions
+            type="comment"
+            :identifier="comment.slug"
+            :reactions="comment.reactions_count"
+            :userReaction="comment.userReaction"
+            :availableReactions="usePage().props.availableReactions"
+        />
     </div>
 </template>
 

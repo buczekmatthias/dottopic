@@ -1,12 +1,5 @@
 <template>
-    <div
-        class="flex justify-between items-center gap-2"
-        :class="
-            type === 'comment'
-                ? 'flex-col max-md:!items-start md:flex-row'
-                : 'my-4'
-        "
-    >
+    <div class="flex justify-between items-center gap-2">
         <div class="flex gap-1" v-if="reactions.count > 0">
             <div class="">
                 <p v-for="r in reactions.display" :key="r">{{ r }}</p>
