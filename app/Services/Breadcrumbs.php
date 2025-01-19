@@ -11,7 +11,7 @@ final class Breadcrumbs
 {
 	public static function getBreadcrumbs(): array
 	{
-		return Session::get('breadcrumbs', []);
+		return Session::get('breadcrumbs', [])[0];
 	}
 
 	public static function generateCrumbs(): void

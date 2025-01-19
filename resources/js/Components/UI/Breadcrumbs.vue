@@ -1,6 +1,7 @@
 <template>
+    <!-- TODO: Modify head to be more accurate -->
     <Head :title="`${crumbs[0]} | dotTopic`" />
-    <div class="font-light">
+    <div class="font-light bg-theme/30 rounded-md px-2.5 py-3">
         <p v-html="getBreadCrumbs()"></p>
     </div>
 </template>
@@ -9,7 +10,7 @@
 import { computed } from "vue";
 import { usePage, Head } from "@inertiajs/vue3";
 
-const crumbs = computed(() => usePage().props.breadcrumbs[0]);
+const crumbs = computed(() => usePage().props.breadcrumbs);
 
 const getBreadCrumbs = () => {
     let str = "";
