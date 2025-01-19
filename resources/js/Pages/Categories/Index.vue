@@ -3,9 +3,9 @@
         <Link
             :href="route('admin.categories.create')"
             v-if="currentUser && currentUser.isStaff"
-            class="self-start"
+            class="md:self-start"
         >
-            <Button>Create new category</Button>
+            <Button extraClasses="w-full">Create new category</Button>
         </Link>
         <Deferred data="categories">
             <template #fallback>
