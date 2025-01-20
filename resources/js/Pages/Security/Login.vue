@@ -51,14 +51,6 @@
                 Sign in
             </Button>
         </form>
-        <!-- TODO: Remove in ready app -->
-        <Link
-            :href="route('security.login')"
-            method="POST"
-            :data="{ email: 'hazy@test.com', password: 'test' }"
-            class="self-start"
-            >Login as dev</Link
-        >
     </div>
 </template>
 
