@@ -33,6 +33,7 @@ class CommentController extends Controller
 
 	public function destroy(Comment $comment): RedirectResponse
 	{
+		$comment->reactions()->delete();
 		$comment->delete();
 
 		return back(status: 303);

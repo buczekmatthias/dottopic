@@ -187,7 +187,6 @@ const props = defineProps({
     characterLimit: { type: Number, default: 0 },
 });
 
-// TODO: Figure how to disable auto bold when clicking on editor
 const model = defineModel();
 
 const extensions = [

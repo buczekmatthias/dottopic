@@ -1,8 +1,7 @@
 <template>
-    <!-- TODO: Modify head to be more accurate -->
-    <Head :title="`${crumbs[0]} | dotTopic`" />
+    <Head :title="getTitle()" />
     <div class="font-light bg-theme/30 rounded-md px-2.5 py-3">
-        <p v-html="getBreadCrumbs()"></p>
+        <p class="truncate" v-html="getBreadCrumbs()"></p>
     </div>
 </template>
 
@@ -26,5 +25,13 @@ const getBreadCrumbs = () => {
     });
 
     return str;
+};
+
+const getTitle = () => {
+    let t = crumbs.value?.[2]
+        ? `${crumbs.value[0]} - ${crumbs.value[2]}`
+        : crumbs.value[0];
+
+    return `${t} | dotTopic`;
 };
 </script>
