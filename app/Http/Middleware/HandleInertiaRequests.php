@@ -49,7 +49,7 @@ class HandleInertiaRequests extends Middleware
 			'errors' => Session::get('errors') ? Session::get('errors')->getBag('default')->getMessages() : [],
 			'routes' => [
 				'current' => Route::currentRouteName(),
-				'ziggy' => (new Ziggy())->filter(Routes::getSharedRoutes())->toArray()
+				'ziggy' => (new Ziggy())->filter(Routes::getSharedRoutes())->toArray(),
 			]
 		];
 

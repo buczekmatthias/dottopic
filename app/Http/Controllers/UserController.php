@@ -25,11 +25,13 @@ class UserController extends Controller
 	public function index(Request $request): Response
 	{
 		$type = $request->get('type', '');
+		$search = $request->get('search', '');
 
 		return inertia('Users/Index', [
-			'users' => Inertia::defer(fn () => UserActions::getUsersList($type, $request->get('page', 1))),
+			'users' => Inertia::defer(fn () => UserActions::getUsersList($type, $search)),
 			'types' => UserRole::values(),
-			'tab' => $type
+			'tab' => $type,
+			'search' => $search
 		]);
 	}
 

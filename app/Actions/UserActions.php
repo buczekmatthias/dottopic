@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 
 final class UserActions
 {
-	public static function getUsersList(string $type, int $page): AnonymousResourceCollection
+	public static function getUsersList(string $type, string $search): AnonymousResourceCollection
 	{
 		$users = User::withCount(['articles', 'comments']);
 
@@ -24,6 +24,10 @@ final class UserActions
 			} else {
 				return to_route('users.index');
 			}
+		}
+
+		if ($search) {
+			$users->whereLike('name', "%{$search}%")->orWhere('username', "%{$search}%");
 		}
 
 		$type = $type === '' ? 'all' : $type;
